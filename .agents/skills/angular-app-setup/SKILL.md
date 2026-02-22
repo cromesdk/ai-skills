@@ -1,17 +1,6 @@
 ---
 name: angular-app-setup
-description: Creates an Angular 20 app in the current root with strict TypeScript and CSS defaults. Use when the user asks to scaffold Angular 20 safely in place and verify build/test results.
-metadata:
-  clawdbot:
-    emoji: "🅰️"
-    requires:
-      anyBins:
-        - npx
-        - npm
-    os:
-      - linux
-      - darwin
-      - win32
+description: Guides creating an Angular 20 application in the current root folder with strict TypeScript, CSS styles, and safe preflight checks. Use when the user asks to create, scaffold, or initialize an Angular 20 app in place with practical defaults and verification.
 ---
 
 # Angular 20 App Setup
@@ -49,18 +38,6 @@ Before running `ng new`:
    - Treat any existing app/workspace files (`angular.json`, `package.json`, `src/`) as non-empty and require explicit user confirmation before continuing.
 3. If files already exist, explicitly confirm user wants in-place generation in this folder.
 4. If target version is not 20, stop and ask whether to continue with this skill or use a version-specific flow.
-
-Use one of these checks:
-
-```bash
-# Portable file listing for quick safety review
-ls -la
-```
-
-```powershell
-# Windows/PowerShell variant
-Get-ChildItem -Force
-```
 
 ## Root directory rule
 
@@ -105,18 +82,6 @@ npm run test -- --watch=false
 ```
 
 If tests are not configured yet, report that clearly and provide the next fix step instead of claiming success.
-If build fails, report the exact failing command and first actionable error, then stop and ask user whether to debug now.
-If tests fail, report failing suite/spec count and first actionable failure, then ask whether to proceed with fixes.
-
-Optional checks for local confidence:
-
-```bash
-npx ng version
-```
-
-```bash
-npx ng config cli.packageManager
-```
 
 ## Output contract
 

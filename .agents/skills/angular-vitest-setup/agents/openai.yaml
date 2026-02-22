@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Vitest Setup"
+  short_description: "Migrate Angular 20 test runners from Karma/Jasmine to Vitest safely"
+  default_prompt: "Use $angular-vitest-setup to migrate a target Angular 20 project from Karma/Jasmine to Vitest with deterministic preflight checks, project-scoped configuration updates, safe dependency cleanup, and build/test verification."

@@ -1,4 +1,4 @@
 interface:
   display_name: "Angular 20 App Setup"
-  short_description: "Install and configure an Angular 20 project"
-  default_prompt: "Use $angular-app-setup to install and configure Angular 20 project in this Angular workspace."
+  short_description: "Scaffold Angular 20 in the current folder with strict defaults and safety checks"
+  default_prompt: "Use $angular-app-setup to create an Angular 20 app in the current directory with --directory ., strict defaults, preflight safety checks, and build/test verification."

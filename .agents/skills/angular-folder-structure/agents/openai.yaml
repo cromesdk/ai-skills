@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Folder Structure"
+  short_description: "Define, audit, and enforce a scalable Angular 20 feature-first architecture."
+  default_prompt: "Use $angular-folder-structure to create, audit, or refactor an Angular 20 app into a deterministic Feature-first + Shared + Core structure with clear boundaries and lazy feature routing."

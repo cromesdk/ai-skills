@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Tailwind v4 Setup"
+  short_description: "Install, repair, or verify Tailwind v4 wiring in Angular 20"
+  default_prompt: "Use $angular-tailwind-setup to set up or fix Tailwind CSS v4 in this Angular 20 workspace, including PostCSS wiring, stylesheet imports, optional dark-mode class toggling, and build verification."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular JSON Server Setup"
+  short_description: "Add, repair, or verify json-server mock APIs for Angular 20"
+  default_prompt: "Use $angular-json-server-setup to deterministically install or fix json-server, wire Angular proxy + scripts, and verify /api mock API flow in this workspace."

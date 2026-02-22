@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular 20 Component Companion + Structure Enforcer"
+  short_description: "Deterministically validate and non-destructively auto-fix Angular component companions, with explicit fallback and violation reporting."
+  default_prompt: "Use $angular-component-rule to scan `src/app/**`, create only missing companions without overwriting, externalize inline template/styles when safe, enforce variant-file separation, and output the required completion report including fallback decisions and unfixable items."

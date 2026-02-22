@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular 20 App Setup"
+  short_description: "Install and configure an Angular 20 project"
+  default_prompt: "Use $angular-app-setup to install and configure Angular 20 project in this Angular workspace."

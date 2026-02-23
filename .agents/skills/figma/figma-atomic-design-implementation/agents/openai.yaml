@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Atomic Design Implementation"
+  short_description: "Implement Figma UI in Angular with strict atomic hierarchy and complete component companion files."
+  default_prompt: "Implement or refactor Angular UI from Figma in strict atomic order (atoms, molecules, organisms, templates, pages), reuse existing components first, enforce companion files (.ts, .html, style, .stories.ts, .spec.ts), and report quality-gate results."

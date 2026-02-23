@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Lucide Angular Bridge"
+  short_description: "Deterministic per-icon Lucide bridging for Figma-to-Angular flows with context gates, export verification, and explicit fallbacks"
+  default_prompt: "Use $figma-lucide-angular-bridge for Figma-driven Angular implementation: confirm Figma context evidence (URL/node-id, tool output, or explicit node request), check `package.json` first (fallback to `package_missing` if unavailable), apply per-icon gates (`scope -> package -> confidence -> mapping -> fallback`), convert only high-confidence icons that resolve to valid `lucide-angular` exports, preserve existing icon convention (`[img]` or `name`) and template tag pattern already used in the file, and report converted vs fallback icons with explicit reasons."

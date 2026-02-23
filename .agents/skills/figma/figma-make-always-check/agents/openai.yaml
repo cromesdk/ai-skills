@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Make Request Router"
+  short_description: "Check OMS Figma Make, then run best global skills."
+  default_prompt: "Check the OMS Figma Make project first, then handle the user request end-to-end with the minimal set of matching global .agents skills."

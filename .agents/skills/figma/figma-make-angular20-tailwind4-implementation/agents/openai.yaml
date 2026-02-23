@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Make -> Angular 20 + Tailwind v4"
+  short_description: "Implement Figma Make UI directly in Angular 20 + Tailwind v4 with deterministic path fallbacks and scoped edits."
+  default_prompt: "Use $figma-make-angular20-tailwind4-implementation to implement a specific Figma Make target in my Angular 20 + Tailwind v4 app. Reuse existing components and tokens, ask at most one blocking question at a time, resolve missing paths using ordered fallbacks (absolute -> workspace-relative -> closest match), avoid unrelated file refactors, and report both targeted and integration verification commands with outcomes."

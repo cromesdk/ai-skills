@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Make Guidelines"
+  short_description: "Deterministic single-file `guidelines/Guidelines.md` generator for Figma Make with explicit inline design tokens"
+  default_prompt: "Use $figma-make-guidelines to generate, rewrite, or repair exactly one self-contained `guidelines/Guidelines.md` for Figma Make. Enforce single-file scope, apply user values first, fill missing values with deterministic defaults, keep required section order (`## 1)` to `## 9)`), include the required footer line exactly once, and avoid repository-path dependencies. Return raw paste-ready Markdown unless fenced output is explicitly requested."

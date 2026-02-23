@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Storybook Setup"
+  short_description: "Install/repair Storybook + Tailwind addon wiring for Angular 20"
+  default_prompt: "Use $angular-storybook-setup to install or repair Storybook in this Angular 20 + Tailwind workspace with addon-themes, addon-designs, addon-a11y, and verification."

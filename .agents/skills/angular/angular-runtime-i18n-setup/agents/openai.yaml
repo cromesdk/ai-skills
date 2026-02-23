@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Runtime i18n Setup"
+  short_description: "Add, repair, and verify runtime language switching in Angular 20"
+  default_prompt: "Use $angular-runtime-i18n-setup to deterministically add or repair runtime localization in this Angular 20 workspace using @ngx-translate/core, including language switch UI, fallback behavior, persistence, and build verification."

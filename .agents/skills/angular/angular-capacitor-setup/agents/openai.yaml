@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Capacitor Setup"
+  short_description: "Add, repair, and verify Capacitor in Angular 20 workspaces with deterministic build/sync checks"
+  default_prompt: "Use $angular-capacitor-setup to add or repair Capacitor in this Angular 20 workspace, resolve webDir from angular.json, configure requested native platforms, run build plus cap sync, and report verification results."

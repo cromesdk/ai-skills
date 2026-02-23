@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular PWA Setup"
+  short_description: "Add, repair, and verify Angular 20 PWA support with deterministic checks"
+  default_prompt: "Use $angular-pwa-setup to add or repair @angular/pwa in this Angular 20 workspace, validate service-worker and manifest wiring, run a production build, and report install/offline verification results."

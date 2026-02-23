@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Supabase Connector Setup"
+  short_description: "Add, repair, and verify DI-first Supabase wiring in Angular 20"
+  default_prompt: "Use $angular-supabase-connector-setup to deterministically install or repair @supabase/supabase-js wiring in this Angular 20 workspace, create typed tokens/providers/connector service, optionally bridge an existing API service via adapter token, and verify with a build."

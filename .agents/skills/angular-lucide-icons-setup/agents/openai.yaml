@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Lucide Icons Setup"
+  short_description: "Install, repair, or verify lucide-angular wiring in Angular 20 workspaces."
+  default_prompt: "Use $angular-lucide-icons-setup to install or fix lucide-angular in this Angular 20 workspace, detect standalone vs NgModule integration, register only required icons, add a template usage example, and run build/test verification."

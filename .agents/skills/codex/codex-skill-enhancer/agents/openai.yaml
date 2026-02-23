@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Skill Enhancer"
+  short_description: "Upgrade a SKILL.md and companion files with deterministic, portable, test-backed improvements"
+  default_prompt: "Use $codex-skill-enhancer to update this skill end-to-end: tighten trigger wording, improve deterministic workflow steps, align agents/openai.yaml, strengthen tests/scenarios.md, and report official references for major changes."

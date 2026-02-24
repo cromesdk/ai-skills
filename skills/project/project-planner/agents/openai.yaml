@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Planner"
+  short_description: "Deterministic project breakdown into milestones, dependencies, estimates, and risks"
+  default_prompt: "Create a decision-ready project plan with milestones, WBS tasks, dependency mapping, critical path, effort/timeline estimates with confidence levels, assumptions, and risk mitigations. If mission-critical inputs are missing, ask focused clarifying questions first."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Tailwind Theme Design"
+  short_description: "Design light/dark Tailwind themes for Angular"
+  default_prompt: "Use $angular-tailwind-theme-design to implement Angular-compatible Tailwind v4 light/dark theming with light as the default."

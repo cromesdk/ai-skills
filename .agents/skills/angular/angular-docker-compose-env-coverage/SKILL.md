@@ -1,13 +1,13 @@
 ---
 name: angular-docker-compose-env-coverage
-description: Create, repair, and validate Dockerfile + docker-compose setups for Angular 20 applications, with explicit checks that variables declared in `.env` files are covered by compose configuration. Use when users ask to dockerize Angular 20, add or fix docker-compose, enforce `.env` variable coverage, or prevent missing runtime/build variables in containerized Angular environments.
+description: Create, repair, and verify Dockerfile plus Docker Compose setup for Angular 20, with deterministic checks that every variable declared in `.env` files is covered by compose configuration. Use when users ask to dockerize Angular 20, add or fix compose files, enforce `.env` coverage, prevent missing runtime/build variables, or standardize repeatable container validation.
 ---
 
 # Angular 20 Docker Compose Env Coverage
 
 ## Goal
 
-Build or fix a production-safe Angular 20 container setup and enforce that every variable defined in `.env` files is represented in `docker-compose` usage.
+Build or fix a production-safe Angular 20 container setup and enforce that every variable defined in targeted `.env` files is represented in Compose usage.
 
 ## Inputs
 
@@ -25,43 +25,50 @@ Build or fix a production-safe Angular 20 container setup and enforce that every
 
 ## Workflow
 
-1. Validate Angular workspace
-- Confirm `package.json` and `angular.json` exist.
+1. Validate workspace and scope
+- Resolve `projectRoot` first; default to current working directory.
+- Confirm `package.json` and `angular.json` exist under `projectRoot`.
 - Confirm `@angular/core` major version is `20`.
-- Stop and report if the project is not Angular 20.
+- Stop and report before any Docker changes if workspace is missing or version is not Angular 20.
 
-2. Create or repair Dockerfile for Angular 20
-- Use multi-stage build by default.
-- Stage 1: Node build (`npm ci`, `npm run build`).
-- Stage 2: lightweight runtime (for example Nginx) serving built files.
-- Keep build args and runtime environment handling explicit.
+2. Create or repair Dockerfile
+- Use a multi-stage build by default.
+- Builder stage: install dependencies deterministically (`npm ci`) and build Angular output.
+- Runtime stage: serve built artifacts from a lightweight web image (for example Nginx).
+- Keep build arguments and runtime environment handling explicit; do not rely on hidden defaults.
 
-3. Create or repair `docker-compose`
-- Ensure services, ports, build context, and image tags are coherent.
+3. Create or repair Compose configuration
+- Detect or create one canonical compose file (`docker-compose.yml`, `docker-compose.yaml`, `compose.yml`, or `compose.yaml`).
+- Ensure services, ports, build context, restart policy, and image naming are coherent.
 - Prefer explicit `environment` mappings for app-relevant variables.
-- When `env_file` is used, keep file paths explicit and stable.
+- If `env_file` is used, keep file paths explicit and stable.
 
 4. Enforce `.env` variable coverage
-- Run:
+- Run coverage check in referenced mode:
 ```bash
-python skills/custom/angular-docker-compose-env-coverage/scripts/check_env_compose_coverage.py --project-root .
+python .agents/skills/angular/angular-docker-compose-env-coverage/scripts/check_env_compose_coverage.py --project-root .
 ```
-- The script exits non-zero when variables are missing from compose coverage.
+- The script must exit non-zero when variables are missing from compose coverage.
 - In `strictCoverage` mode, require explicit environment wiring:
 ```bash
-python skills/custom/angular-docker-compose-env-coverage/scripts/check_env_compose_coverage.py --project-root . --mode strict
+python .agents/skills/angular/angular-docker-compose-env-coverage/scripts/check_env_compose_coverage.py --project-root . --mode strict
 ```
 
 5. Fix uncovered variables
-- Add missing variables to compose `environment:` with explicit mapping (preferred), or ensure they are referenced via `${VAR}`.
+- Add missing variables to compose `environment:` with explicit mapping (preferred), or ensure they are referenced via `${VAR}` where appropriate.
 - Re-run the script until it reports full coverage.
 
-6. Verify container workflow
+6. Verify compose model and runtime
+- Validate merged Compose model first:
+```bash
+docker compose -f <compose-file> config
+```
 - Build and start services:
 ```bash
-docker compose up --build
+docker compose -f <compose-file> up --build
 ```
-- Confirm containers start and Angular app is reachable.
+- Confirm containers start and Angular app is reachable at the configured port.
+- If runtime verification cannot be executed (for example Docker engine unavailable), report that clearly with the exact blocker.
 
 ## Guardrails
 
@@ -69,6 +76,7 @@ docker compose up --build
 - Do not rely on implicit assumptions about `.env` loading behavior.
 - Keep variable names consistent across `.env`, compose, and any build args.
 - Preserve unrelated compose services and existing user configuration.
+- Do not reorder or remove unrelated keys unless required for correctness.
 
 ## Script Behavior
 
@@ -86,4 +94,5 @@ Coverage definition:
 
 - Dockerfile and compose are valid for Angular 20 deployment flow.
 - Coverage script passes with requested mode.
-- User can run one command to verify future changes.
+- Compose config validation passes before runtime startup.
+- User can run one deterministic verification command sequence for future changes.

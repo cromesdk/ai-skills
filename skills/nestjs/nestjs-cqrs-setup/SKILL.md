@@ -1,72 +1,98 @@
 ---
 name: nestjs-cqrs-setup
-description: Install and configure @nestjs/cqrs in NestJS with environment-driven enable or disable using @nestjs/config and CQRS_ENABLED. Use when the user asks to add CQRS, CommandBus, QueryBus, EventBus, command or query handlers, or gate CQRS modules by environment.
+description: Install, repair, and verify NestJS CQRS with environment-gated module loading via @nestjs/config and CQRS_ENABLED. Use when users ask to add CQRS, wire CommandBus/QueryBus/EventBus, create command or query handlers, or prevent DI failures by conditionally enabling CQRS modules.
 ---
 
 # NestJS CQRS Setup
 
-Use this workflow to add CQRS and keep it safely toggled by environment.
+Use this workflow to add or fix CQRS in NestJS with deterministic environment-based enable or disable behavior.
 
 ## Prerequisites
 
-- NestJS backend with a root module (`AppModule`) and `main.ts`.
-- Use Node.js 20+ for Nest 11 projects (or follow the repository's current runtime requirement).
-- Keep Nest, `@nestjs/cqrs`, and `@nestjs/config` major versions aligned.
+- NestJS project with `src/main.ts` and a root module (typically `src/app.module.ts`).
+- Node.js runtime compatible with the project Nest major version.
+- Package manager lockfile present (`package-lock.json`, `pnpm-lock.yaml`, or `yarn.lock`).
 
-## Install steps
+## Step 1: Preflight checks
 
-1. Install packages from project root:
+1. Run all commands from project root.
+2. Confirm required files exist:
+   - `src/main.ts`
+   - root module file (`src/app.module.ts` or project equivalent)
+3. Detect package manager from lockfile and use only that manager for install and scripts.
+4. Detect Nest major version from `package.json` (`@nestjs/common`).
+5. If Nest 11 is detected, require Node.js 20+ before proceeding.
 
-   ```bash
-   npm install @nestjs/cqrs @nestjs/config
-   ```
+If preflight fails, stop and report the exact blocker before making edits.
 
-2. Verify version alignment:
+## Step 2: Install dependencies
+
+Install required packages:
+
+```bash
+npm install @nestjs/cqrs @nestjs/config
+```
+
+Package-manager equivalents are allowed (`pnpm add`, `yarn add`) when matching the repository lockfile.
+
+## Step 3: Align package majors
+
+Match package majors to the Nest major:
+
 - Nest 11 -> `@nestjs/cqrs` ^11 and `@nestjs/config` ^4
 - Nest 10 -> `@nestjs/cqrs` ^10 and `@nestjs/config` ^3
-- Resolve peer dependency warnings before wiring CQRS.
 
-## Env control
+Resolve peer dependency or major-version mismatches before wiring modules.
 
-Single flag: `CQRS_ENABLED`
+## Step 4: Add environment toggle
 
-- `true` or unset: CQRS is enabled.
-- `false`: CQRS is disabled.
+Create or update `.env` with a single CQRS gate:
 
-Use `ConditionalModule.registerWhen(...)` from `@nestjs/config` to avoid reading `.env` at module load time.
+```env
+CQRS_ENABLED=true
+```
 
-## CQRS wiring (recommended)
+Behavior contract:
 
-1. In `AppModule`, add `ConfigModule.forRoot({ isGlobal: true })`.
-2. In the same `imports` array, add:
-   - `ConditionalModule.registerWhen(CqrsModule.forRoot(), 'CQRS_ENABLED')`
-3. Keep CQRS handlers in feature modules as providers and import `CqrsModule` where those handlers are declared.
-4. If CQRS is disabled, avoid loading modules that inject `CommandBus`, `QueryBus`, or `EventBus`. Gate those modules with the same `ConditionalModule.registerWhen(...)` pattern.
+- `true` or unset: CQRS enabled
+- `false`: CQRS disabled
 
-Full snippets are in [reference.md](reference.md) and [examples.md](examples.md).
+## Step 5: Wire AppModule deterministically
 
-## NodeNext / ESM
+In the root module imports:
 
-If the project uses `"moduleResolution": "nodenext"` or `"node16"`, use emitted `.js` extensions in relative TypeScript imports (for example, `./items/commands/create-item.command.js`).
+1. Add `ConfigModule.forRoot({ isGlobal: true })`.
+2. Add `ConditionalModule.registerWhen(CqrsModule.forRoot(), 'CQRS_ENABLED')`.
+3. Gate CQRS-dependent feature modules with the same flag using `ConditionalModule.registerWhen(...)`.
 
-## Verification
+Use the same toggle for infrastructure and CQRS-consuming modules to avoid DI failures when disabled.
 
-1. Set `CQRS_ENABLED=true` in `.env`, run the app, and confirm it boots without CQRS DI errors.
-2. Execute a minimal command and query flow (see [examples.md](examples.md)); confirm handlers run.
-3. Set `CQRS_ENABLED=false` and restart.
-4. Confirm CQRS-gated modules are not loaded and the app still boots.
+## Step 6: Wire feature modules and handlers
 
-## Checklist
+1. In each CQRS feature module, import `CqrsModule`.
+2. Register command/query/event handlers in `providers`.
+3. Use `CommandBus`, `QueryBus`, and `EventBus` only in modules that are CQRS-enabled or conditionally imported.
 
-- [ ] Install `@nestjs/cqrs` and `@nestjs/config`
-- [ ] Align package major versions with the Nest major version
-- [ ] Add `ConfigModule.forRoot({ isGlobal: true })`
-- [ ] Add `ConditionalModule.registerWhen(CqrsModule.forRoot(), 'CQRS_ENABLED')`
-- [ ] Create or update `.env` with `CQRS_ENABLED=true|false`
-- [ ] Gate CQRS-consuming modules when disabled
-- [ ] Verify command and query execution with [examples.md](examples.md)
+## Step 7: NodeNext and ESM safeguard
 
-## Additional resources
+If `tsconfig` uses `moduleResolution: "nodenext"` or `"node16"`, use `.js` file extensions in relative TypeScript imports.
 
-- AppModule wiring and conditional imports: [reference.md](reference.md)
-- `.env` and minimal command/query examples: [examples.md](examples.md)
+## Step 8: Verification gates
+
+1. Set `CQRS_ENABLED=true`, run the app, and confirm startup without CQRS DI errors.
+2. Execute one command and one query flow and confirm handlers run.
+3. Set `CQRS_ENABLED=false`, restart, and confirm:
+   - app still boots
+   - CQRS-gated modules are not loaded
+   - no `CommandBus`/`QueryBus`/`EventBus` injection failures occur
+
+## Failure handling
+
+- If dependency installation fails, report exact failing command and error output, then stop before partial wiring.
+- If required Nest files are missing, stop and request the correct project path.
+- If existing architecture already contains CQRS setup, prefer minimal non-destructive edits.
+
+## References in this skill
+
+- AppModule conditional wiring pattern: [reference.md](reference.md)
+- Minimal command/query flow: [examples.md](examples.md)

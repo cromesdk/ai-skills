@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS CQRS Setup"
+  short_description: "Install, repair, and verify NestJS CQRS with env-driven ConditionalModule gating"
+  default_prompt: "Use $nestjs-cqrs-setup to add or fix @nestjs/cqrs and @nestjs/config wiring with CQRS_ENABLED toggle, gate CQRS-dependent modules safely, and verify enabled/disabled startup behavior."

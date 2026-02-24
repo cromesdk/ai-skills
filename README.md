@@ -15,14 +15,14 @@ Scope includes skill authoring, skill maintenance, and scenario coverage for Ang
 
 ## Architecture at a Glance
 
-The repository uses a domain-first folder model under `.agents/skills`.
+The repository uses a domain-first folder model under `skills`.
 
 | Domain | Purpose | Path |
 |---|---|---|
-| `angular` | Angular app/tooling workflows | `.agents/skills/angular` |
-| `figma` | Figma-to-code workflows | `.agents/skills/figma` |
-| `codex` | Assistant behavior hardening workflows | `.agents/skills/codex` |
-| `project` | Project documentation maintenance workflows | `.agents/skills/project` |
+| `angular` | Angular app/tooling workflows | `skills/angular` |
+| `figma` | Figma-to-code workflows | `skills/figma` |
+| `codex` | Assistant behavior hardening workflows | `skills/codex` |
+| `project` | Project documentation maintenance workflows | `skills/project` |
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ Not applicable: no deployment manifests, packaging pipeline, or release automati
 
 ## Contributing and Code Standards
 
-1. Add or update a skill under `.agents/skills/<domain>/<skill-name>/`.
+1. Add or update a skill under `skills/<domain>/<skill-name>/`.
 2. Keep instructions deterministic and non-destructive by default.
 3. Update `tests/scenarios.md` when behavior changes.
 4. Keep `agents/openai.yaml` metadata aligned with skill behavior.

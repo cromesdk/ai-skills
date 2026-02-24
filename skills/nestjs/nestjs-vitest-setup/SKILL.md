@@ -1,28 +1,37 @@
 ---
 name: nestjs-vitest-setup
-description: Install and configure Vitest for NestJS backends, migrate Jest-based Nest tests, and write or fix unit and e2e tests with @nestjs/testing, vi mocks/spies, and coverage. Use when a user asks to add Vitest to a Nest project, convert Jest scripts/config/tests, debug failing Nest tests under Vitest, or improve Nest test speed and reliability.
+description: Install, migrate, or repair Vitest in NestJS backends with deterministic preflight checks, package-manager aware commands, Jest-to-Vitest conversion, and verification gates for unit, e2e, and coverage runs. Use when users ask to add Vitest, replace Jest in Nest projects, fix broken Nest tests under Vitest, standardize test scripts/config, or improve test reliability and runtime.
 ---
 
 # NestJS Vitest
 
-Use this workflow to set up and maintain NestJS tests with Vitest.
+Use this workflow to set up, migrate, or repair NestJS tests with Vitest.
 
-## Prerequisites
+## Preflight checks (required)
 
-- Run commands from the Nest app root.
-- Use Node.js 20+ for modern Nest projects.
-- Keep Nest package major versions aligned.
-- Keep `@nestjs/testing` and `supertest` available for module and e2e tests.
+1. Confirm Nest backend root by checking all required files exist:
+- `package.json`
+- `tsconfig.json`
+- `src/main.ts`
+- `src/app.module.ts`
+2. Detect package manager from lockfile and keep command style consistent:
+- `package-lock.json` -> `npm`
+- `pnpm-lock.yaml` -> `pnpm`
+- `yarn.lock` -> `yarn`
+3. Confirm supported runtime:
+- Prefer Node.js 20+.
+4. Stop early if required files are missing and report exact missing path(s) before editing.
 
-## Install and baseline config
+## Install and baseline configuration
 
-1. Install dev dependencies:
+1. Install required dev dependencies:
 
 ```bash
 npm install --save-dev vitest @vitest/coverage-v8 vite-tsconfig-paths
 ```
 
-2. Create `vitest.config.ts`:
+2. Ensure `@nestjs/testing` and `supertest` are available for Nest unit/e2e tests.
+3. Create or update `vitest.config.ts`:
 
 ```typescript
 import { defineConfig } from 'vitest/config'
@@ -45,7 +54,7 @@ export default defineConfig({
 })
 ```
 
-3. Create `test/vitest.setup.ts`:
+4. Create or update `test/vitest.setup.ts`:
 
 ```typescript
 import { afterEach, vi } from 'vitest'
@@ -56,7 +65,7 @@ afterEach(() => {
 })
 ```
 
-4. Update `package.json` scripts:
+5. Update `package.json` scripts:
 
 ```json
 {
@@ -69,11 +78,11 @@ afterEach(() => {
 }
 ```
 
-If the repository already uses path aliases in `tsconfig.json`, keep `vite-tsconfig-paths`. If no aliases are used, the plugin is optional.
+6. Keep `vite-tsconfig-paths` when the project uses TS path aliases. If no aliases are present, the plugin is optional.
 
-## Migrate from Jest
+## Migration from Jest
 
-Apply these substitutions in tests and helper files:
+1. Convert Jest APIs in tests and helpers:
 
 - `jest.fn` -> `vi.fn`
 - `jest.spyOn` -> `vi.spyOn`
@@ -84,26 +93,25 @@ Apply these substitutions in tests and helper files:
 - `jest.useRealTimers` -> `vi.useRealTimers`
 - `jest.setSystemTime` -> `vi.setSystemTime`
 
-Then remove Jest-only configuration and scripts when no longer needed (`jest.config.*`, `ts-jest` transforms, and scripts that call Jest directly).
+2. Remove Jest-only configuration once conversion is complete:
+- `jest.config.*`
+- `ts-jest` transforms
+- scripts invoking `jest`
+3. If Jest must remain temporarily (monorepo/shared tooling), document that as an intentional exception.
 
 ## NestJS test patterns
 
-### Unit tests for providers/services
-
-- Build a `TestingModule` with `Test.createTestingModule`.
-- Mock dependencies via `useValue` and `vi.fn`.
-- Keep behavior-focused assertions at the service boundary.
-
-### Controller tests
-
-- Test delegation and response shaping.
-- Stub service methods with `vi.fn` instead of calling external systems.
-
-### e2e tests
-
-- Compile module imports, create `INestApplication`, and call `await app.init()`.
+1. Unit tests for providers/services:
+- Build a `TestingModule` via `Test.createTestingModule`.
+- Mock dependencies with `useValue` and `vi.fn`.
+- Assert behavior at the service boundary.
+2. Controller tests:
+- Validate delegation and response shaping.
+- Stub service methods with `vi.fn` instead of real external calls.
+3. e2e tests:
+- Create and initialize `INestApplication` with `await app.init()`.
 - Use `supertest` against `app.getHttpServer()`.
-- Always close the app in `afterAll` to avoid open-handle hangs.
+- Always run `await app.close()` in `afterAll`.
 
 See concrete snippets in [examples.md](examples.md).
 
@@ -118,13 +126,15 @@ See concrete snippets in [examples.md](examples.md).
 - Decorator or reflection issues:
   - Keep `experimentalDecorators` and `emitDecoratorMetadata` consistent with the app tsconfig.
 
-## Verification checklist
+## Verification gates (required)
 
-- [ ] `npm run test` passes
-- [ ] `npm run test:e2e` passes
-- [ ] `npm run test:cov` creates `coverage/`
-- [ ] Jest-only scripts and config were removed or intentionally retained
-- [ ] At least one unit and one e2e spec run cleanly under Vitest
+1. Run unit tests: `test`
+2. Run e2e tests: `test:e2e`
+3. Run coverage: `test:cov`
+4. Confirm `coverage/` was generated.
+5. Confirm Jest-only config/scripts were removed or intentionally retained with reason documented.
+6. Confirm at least one unit and one e2e spec pass with Vitest.
+7. If any gate fails, report exact failing command and stop before claiming success.
 
 ## Additional resources
 

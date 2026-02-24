@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS TypeScript Setup"
+  short_description: "Scaffold or repair deterministic NestJS TypeScript setup with version checks and verification gates"
+  default_prompt: "Use $nestjs-typescript-setup to create or fix a NestJS TypeScript project with the selected package manager, then verify startup and Node/CLI compatibility."

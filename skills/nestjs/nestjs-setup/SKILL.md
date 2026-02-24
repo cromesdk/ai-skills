@@ -1,89 +1,67 @@
 ---
 name: nestjs-typescript-setup
-description: Installs and scaffolds NestJS with TypeScript using the Nest CLI with project-root-safe workflow, package-manager selection, strict TypeScript mode, optional SWC, and live version/runtime checks. Use when the user asks to install NestJS, bootstrap a new Nest backend, add Nest to a repository, or set up Nest with TypeScript.
+description: Scaffold or repair a NestJS TypeScript backend with deterministic Nest CLI commands, package-manager aware scripts, strict mode defaults, optional SWC enablement, and verification gates. Use when users ask to install NestJS, bootstrap a new Nest API, add NestJS into an existing repository, fix broken setup commands, or validate Node/CLI version compatibility.
 ---
 
-# NestJS + TypeScript Install (Best Practice)
+# NestJS TypeScript Setup
 
-## Confirm inputs first
+## Scope and trigger
 
-- Require a `project-name` when not explicitly provided. Do not assume one.
-- Confirm package manager preference (`npm`, `pnpm`, `yarn`) when not explicit.
-- If creating inside an existing git repository, add `--skip-git` to avoid nested repositories.
+Use this skill when the request is about creating, repairing, or validating a NestJS + TypeScript project setup.
 
-## Root directory
+## Inputs to resolve before execution
 
-Installation must end in the Nest app root. Scaffold from the intended parent directory, then run all install and run commands from the generated project root.
+Collect or confirm these inputs first:
 
-## Prerequisites
+- `projectPathOrName`: required; do not assume a name when missing.
+- `packageManager`: one of `npm`, `pnpm`, `yarn`.
+- `targetParentDir`: directory where scaffolding should run.
+- `existingGitRepo`: whether the target parent already has `.git`.
+- `useSwc`: optional; default `false` unless requested.
 
-- Node.js baseline from docs: `>= 20` ([First Steps - Prerequisites](https://docs.nestjs.com/first-steps#prerequisites)).
-- Current `@nestjs/cli` runtime floor is `>= 20.11` (verify with `npm view @nestjs/cli engines --json`).
+If any required input is missing, ask one precise question.
 
-## Recommended path (default)
+## Preconditions
 
-Use `npx` so you do not depend on a preinstalled global CLI:
+Run preflight checks before scaffolding:
 
-1. Scaffold:
-   - `npx @nestjs/cli@latest new project-name --package-manager npm --strict`
-2. Enter project root:
-   - `cd project-name`
-3. Run in watch mode:
+1. Confirm Node version satisfies Nest docs baseline (`>= 20`) and current CLI engine floor.
+   - `node -v`
+   - `npm view @nestjs/cli engines --json`
+2. Confirm package manager is installed.
+   - `npm -v` or `pnpm -v` or `yarn -v`
+3. Confirm target parent exists and is writable.
+
+Stop and report blocker details if preflight fails.
+
+## Deterministic scaffold workflow
+
+1. Build scaffold command from target parent directory:
+   - `npx @nestjs/cli@latest new <projectPathOrName> --package-manager <packageManager> --strict`
+2. If `existingGitRepo=true`, append `--skip-git`.
+3. Execute scaffold command from `targetParentDir`.
+4. Change directory into created Nest app root.
+5. Run startup command with chosen package manager:
    - `npm run start:dev`
-4. Verify:
-   - open `http://localhost:3000` and confirm `Hello World!`
-
-If the user chose `pnpm` or `yarn`, set `--package-manager` accordingly and use matching script commands.
+   - `pnpm start:dev`
+   - `yarn start:dev`
+6. Verify app responds at `http://localhost:3000` with default starter response.
 
 ## Existing repository integration
 
-When adding Nest to a repository that already has git initialized:
+When adding Nest inside an already versioned repository:
 
-1. Scaffold from the target parent directory.
-2. Use `--skip-git` so `nest new` does not initialize another repository.
-3. Keep all subsequent commands in the Nest app root.
+1. Run scaffold from repository root or chosen subfolder parent.
+2. Always include `--skip-git`.
+3. Keep all subsequent install/run/lint/test commands in the generated Nest app root.
 
-Example:
-- `npx @nestjs/cli@latest new services/api --package-manager pnpm --strict --skip-git`
+## Optional SWC enablement
 
-## Alternatives
+Only apply when explicitly requested.
 
-- Global CLI install:
-  1. `npm i -g @nestjs/cli@latest`
-  2. `nest new project-name --package-manager npm --strict`
-- Git starter:
-  1. `git clone https://github.com/nestjs/typescript-starter.git project-name`
-  2. `cd project-name`
-  3. `npm install`
-  4. `npm run start:dev`
-
-## Live version checks
-
-Use these commands when version certainty matters:
-
-- `npm view @nestjs/core version`
-- `npm view @nestjs/cli version`
-- `npm view @nestjs/cli engines --json`
-
-Interpretation:
-- Keep Nest packages on the same major version.
-- Ensure local Node satisfies `@nestjs/cli` `engines.node` (currently `>= 20.11`).
-
-## Run scripts
-
-From project root:
-- `npm run start` for one-shot run
-- `npm run start:dev` for watch mode
-- `npm run test` for unit tests
-- `npm run lint` for lint checks
-
-## Optional SWC builder (faster builds)
-
-Follow [SWC docs](https://docs.nestjs.com/recipes/swc). From project root:
-
-1. Install:
+1. Install SWC dependencies in project root:
    - `npm i --save-dev @swc/cli @swc/core`
-2. Set default builder in `nest-cli.json`:
+2. Update `nest-cli.json`:
 
 ```json
 {
@@ -94,36 +72,26 @@ Follow [SWC docs](https://docs.nestjs.com/recipes/swc). From project root:
 }
 ```
 
-3. For one-off runs:
-   - `nest start -b swc`
-   - `nest start -b swc -w`
-   - `nest start -b swc --type-check` when you need explicit type-check + plugin metadata behavior
+3. Verify with one command:
+   - `npx nest start -b swc --type-check`
 
-## .gitignore
+## Verification gates
 
-Ensure project root `.gitignore` includes at minimum:
-- `dist/`
-- `node_modules/`
+Mark complete only when all checks pass:
 
-Recommended additions:
-- `.env`
-- `.env.local`
-- `*.log`
-- `coverage/`
-- `.DS_Store`
-- `.idea/`
-- `.vscode/`
+- [ ] Preflight checks passed (Node, package manager, writable target)
+- [ ] Scaffold command completed without interactive ambiguity
+- [ ] Commands executed from generated Nest app root
+- [ ] Dev server starts successfully
+- [ ] Local HTTP response check passes (`http://localhost:3000`)
+- [ ] Optional SWC path verified when enabled
 
-See [reference.md](reference.md) for links and a minimal template.
+## Recovery rules
 
-## Verification checklist
+- If scaffolding partially succeeds (folder created, install failed), continue from project root and fix dependency/install issues without re-scaffolding unless user requests reset.
+- If package manager mismatch is detected after scaffold, align scripts and lockfile usage to the user-selected manager.
+- Do not delete user files to recover from setup failures.
 
-- [ ] Scaffold succeeds with chosen package manager
-- [ ] Commands run from Nest app root
-- [ ] `npm run start:dev` starts successfully
-- [ ] `http://localhost:3000` returns `Hello World!`
-- [ ] Optional SWC path compiles and runs as expected
+## Official references
 
-## Additional resources
-
-For official docs and command references, see [reference.md](reference.md).
+Use `reference.md` for authoritative links and command details.

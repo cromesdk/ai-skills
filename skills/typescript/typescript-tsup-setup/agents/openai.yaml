@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript TSup Setup"
+  short_description: "Install and configure tsup builds for TypeScript"
+  default_prompt: "Use $typescript-tsup-setup to install and configure tsup in this TypeScript project."

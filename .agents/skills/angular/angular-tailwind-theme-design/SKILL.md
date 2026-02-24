@@ -1,6 +1,6 @@
 ---
 name: angular-tailwind-theme-design
-description: Implement a production-ready, Angular-compatible Tailwind CSS v4 theme system with explicit Light and Dark themes, using Light as the default. Use when users ask to add or refactor app theming, dark mode toggles, design tokens, or global color systems in Angular projects that use Tailwind v4 (or need to be aligned to it).
+description: Implement or refactor an Angular 20 + Tailwind CSS v4 light/dark theme system with Light as the default, class-based dark mode (`.dark`), semantic design tokens, and deterministic persistence wiring. Use when users ask to add/fix app theming, dark-mode toggles, tokenized global colors, or standardize Tailwind v4 theme behavior.
 ---
 
 # Angular Tailwind Theme Design
@@ -30,13 +30,20 @@ Create a single source of truth for theme tokens that works with Angular + Tailw
 ### 1) Validate Angular + Tailwind v4 context
 
 - Confirm `angular.json` and `package.json` exist.
-- Confirm Angular project context is valid.
+- Confirm Angular major version is `20`.
 - Confirm Tailwind v4 setup exists.
-- If Tailwind v4 is missing or broken, fix setup first, then continue.
+- If Tailwind v4 is missing or broken, run the `angular-tailwind-setup` skill first, then continue.
+- If blockers remain (missing workspace files, unsupported Angular version), stop before edits and report the exact blocker.
 
-### 2) Define theme tokens in global styles
+### 2) Resolve the authoritative global stylesheet
 
-Edit the main global stylesheet (`src/styles.css` or `src/styles.scss`):
+- Read the configured global style entry from `angular.json` for the active build target.
+- If multiple global stylesheet entries exist, modify only the primary application stylesheet and do not overwrite third-party/vendor style files.
+- Preserve existing file type and conventions (`.css` or `.scss`).
+
+### 3) Define theme tokens in global styles
+
+Edit the resolved global stylesheet:
 
 ```css
 @import "tailwindcss";
@@ -63,7 +70,7 @@ Edit the main global stylesheet (`src/styles.css` or `src/styles.scss`):
 
 Use RGB triplets for token values so opacity modifiers remain easy with Tailwind utilities.
 
-### 3) Map tokens into reusable utility classes
+### 4) Map tokens into reusable utility classes
 
 Add app-level utility classes in the same global stylesheet:
 
@@ -93,7 +100,7 @@ Add app-level utility classes in the same global stylesheet:
 
 Prefer these semantic classes in components over raw palette classes.
 
-### 4) Implement light-by-default theme behavior in Angular
+### 5) Implement light-by-default theme behavior in Angular
 
 If `createThemeService` is enabled, create a minimal service to apply and persist theme:
 
@@ -130,19 +137,21 @@ export class ThemeService {
 ```
 
 Call `initTheme()` early (for example in app bootstrap path) to enforce Light as default when no explicit user choice exists.
+If `persistUserChoice` is `false`, skip writes to `localStorage` and keep runtime-only toggling.
 
-### 5) Add a small toggle UI (optional but recommended)
+### 6) Add a small toggle UI (optional but recommended)
 
 - Add a toggle button in a shell or header component.
 - Bind the click handler to `themeService.toggleTheme()`.
 - Use semantic classes (`bg-app`, `text-app`, `bg-surface`) in the template to verify theme switching.
 
-### 6) Verify behavior
+### 7) Verify behavior
 
 - Load app in a clean browser profile with no `localStorage` entry and confirm Light is active.
 - Toggle once and confirm `.dark` is added to `<html>`.
 - Reload and confirm persisted mode is restored.
 - Check at least one component in both modes for contrast and readability.
+- Run project verification commands when available (`npm run build`, and `npm test` if a test target exists) and report pass/fail/unavailable explicitly.
 
 ## Guardrails
 
@@ -151,3 +160,4 @@ Call `initTheme()` early (for example in app bootstrap path) to enforce Light as
 - Avoid hard-coding colors in components; route through theme tokens.
 - Preserve existing project style conventions (`css` vs `scss`, formatting rules, naming style).
 - Minimize scope: implement tokens and wiring first, then expand theme palette only as needed.
+- Keep instructions assistant-agnostic: use generic terms like "assistant" or "agent" and avoid platform-locked assumptions.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Angular Docker Env Coverage"
+  short_description: "Build Angular 20 Docker setup with .env coverage checks"
+  default_prompt: "Use $angular-docker-compose-env-coverage to create or fix Angular 20 Docker and docker-compose files so all .env variables are mapped in compose."

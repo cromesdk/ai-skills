@@ -1,13 +1,13 @@
 ---
 name: universal-figma-skill
-description: Execute an end-to-end Figma-to-Angular 20 implementation workflow in one skill by combining Atomic Design decomposition, Figma Make guidelines generation, Figma Make to Angular 20 + Tailwind v4 implementation, Lucide Angular icon bridging, feature-first Angular folder architecture enforcement, and component companion-file completeness enforcement. Use when a user wants one selectable skill to handle Figma-driven UI delivery from design intake through production-ready Angular structure and file hygiene.
+description: Unified Figma-to-Angular 20 delivery workflow for implementation and refactor requests. Use when users ask to implement UI from Figma URLs or node IDs, convert Figma Make exports to Angular 20 + Tailwind v4, enforce Atomic Design decomposition, normalize feature-first folder structure, apply component companion-file rules, and bridge eligible icons to existing lucide-angular usage without adding new UI/icon libraries.
 ---
 
 # Universal Figma Skill
 
 ## Goal
 
-Run a single coordinated workflow for Figma-driven Angular implementation without switching skills manually.
+Run one deterministic, end-to-end workflow for Figma-driven Angular delivery without manually switching between multiple skills.
 
 ## Skill Composition
 
@@ -22,13 +22,24 @@ Load and apply these source skills in this order:
 
 If one source file is unavailable, continue with remaining sources and report the missing file.
 
-## Execution Order
+## Required Inputs
+
+Collect and confirm these inputs before editing:
+
+1. Target project/workspace path.
+2. Design source (Figma URL/file key/node ID, Figma Make export path, or screenshot scope).
+3. Implementation scope (route, page, component, or refactor boundary).
+
+If one required input is missing and cannot be inferred safely, ask one blocking question and stop before edits.
+
+## Execution Order (Deterministic)
 
 ### Phase 1: Intake and baseline
 
 1. Collect the minimum required design and project inputs.
 2. Verify Angular and Tailwind versions and existing architecture quickly.
 3. Infer missing non-blocking details and avoid long discovery chat.
+4. Identify existing reusable components/tokens before creating new UI primitives.
 
 ### Phase 2: Guidelines and mapping
 
@@ -41,6 +52,7 @@ If one source file is unavailable, continue with remaining sources and report th
 1. Implement in Atomic Design sequence: atoms, molecules, organisms, templates, pages.
 2. Follow Angular 20 + Tailwind v4 project conventions and reuse existing components first.
 3. Apply Lucide bridge rules: replace Lucide icon assets with `lucide-angular` only when confidently mapped and already installed.
+4. Keep edits limited to scoped files and direct shared dependencies.
 
 ### Phase 4: Structure and completeness enforcement
 
@@ -53,6 +65,7 @@ If one source file is unavailable, continue with remaining sources and report th
 1. Run targeted verification (tests/typecheck/build as appropriate).
 2. Report implementation paths, reuse decisions, assumptions, and verification results.
 3. Report component completeness metrics and any unfixable structural violations.
+4. If verification cannot run, state exactly what was unavailable and why.
 
 ## Branching Rules
 
@@ -60,6 +73,7 @@ If one source file is unavailable, continue with remaining sources and report th
 2. If the user asks only for code implementation, skip guideline generation unless explicitly requested.
 3. If the user asks for architecture or folder refactor, prioritize folder-structure enforcement before deep UI edits.
 4. If `lucide-angular` is not installed, do not install from this skill; keep normal asset flow.
+5. If design scope is ambiguous across multiple plausible targets, ask one blocking scope question before edits.
 
 ## Guardrails
 
@@ -67,6 +81,7 @@ If one source file is unavailable, continue with remaining sources and report th
 2. Do not introduce new UI/icon libraries.
 3. Do not overwrite existing files when enforcing component completeness.
 4. Ask at most one blocking question at a time; otherwise proceed with conservative assumptions.
+5. Use repository tokens/patterns over raw Figma values when they conflict; report deltas.
 
 ## Required Output Contract
 
@@ -79,3 +94,12 @@ Return:
 5. Style and Storybook detection outcomes.
 6. Verification commands run and outcomes.
 7. Remaining manual follow-ups, if any.
+
+## Success Criteria
+
+The run is complete only when:
+
+1. Executed branches match user scope and are listed explicitly.
+2. All touched files comply with folder and companion-file rules.
+3. Validation status is truthful (pass/fail/unavailable with reason).
+4. Report includes assumptions, design-to-code deltas, and follow-ups.

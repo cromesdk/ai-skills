@@ -1,4 +1,4 @@
 interface:
   display_name: "Universal Figma Workflow"
-  short_description: "Run end-to-end Figma-to-Angular workflow as one skill."
-  default_prompt: "Implement a Figma-driven Angular UI end to end using atomic design, folder structure, component completeness, Figma Make guidance, Tailwind v4 mapping, and Lucide icon bridging."
+  short_description: "Run a single deterministic Figma-to-Angular 20 workflow for scoped UI delivery."
+  default_prompt: "Implement or refactor the requested Figma-driven Angular 20 scope end to end: confirm inputs, map to Atomic Design, reuse existing components/tokens, enforce feature-first folders and component companion files, apply Lucide bridging only when confidently mapped and already installed, then run targeted verification and report outcomes."

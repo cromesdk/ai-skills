@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Swagger Setup"
+  short_description: "Install, repair, and verify NestJS Swagger/OpenAPI routes with environment-driven controls"
+  default_prompt: "Use $nestjs-swagger-setup to add or fix @nestjs/swagger wiring with SWAGGER_* env toggles, configure UI/raw/json routes safely, and verify endpoint behavior in this NestJS project."

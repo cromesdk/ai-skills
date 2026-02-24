@@ -1,109 +1,106 @@
 ---
 name: nestjs-swagger-setup
-description: Install and configure OpenAPI docs in NestJS using @nestjs/swagger with environment-driven SWAGGER_* settings, optional bearer auth, and safe defaults for UI/raw docs exposure. Include an explicit OpenAPI JSON endpoint (default `openapi.json`) and an automatic Swagger UI "Download OpenAPI" button. Use when the user asks to install Swagger, add API documentation endpoints, or wire OpenAPI in a Nest backend.
+description: Install, repair, and verify OpenAPI documentation in NestJS using `@nestjs/swagger` with `@nestjs/config`-driven `SWAGGER_*` controls, optional bearer auth, explicit JSON endpoint configuration (`jsonDocumentUrl`), and deterministic UI/raw exposure gates. Use when users ask to add Swagger UI, expose or move OpenAPI JSON routes, fix broken Swagger wiring, standardize environment-based docs toggles, or validate production-safe docs behavior.
 ---
 
-# NestJS Swagger Install
+# NestJS Swagger Setup
 
-Use this workflow to add Swagger UI and OpenAPI JSON endpoints in a Nest app.
+Use this workflow to install or repair Swagger UI and OpenAPI JSON endpoints in a NestJS application.
 
-## Prerequisites
+## Inputs
 
-- Have a NestJS app with a root module (`AppModule`) and `main.ts`.
-- Use Node.js >= 20 (Nest 11 baseline).
-- Keep Nest and `@nestjs/swagger` major versions aligned.
+Collect before changes:
+- Project root path
+- Package manager (`npm`, `pnpm`, or `yarn`)
+- Existing global prefix usage (`app.setGlobalPrefix(...)`)
+- Desired docs exposure in production (`enabled` or `disabled`)
 
-## Install steps
+If a required input is missing, ask one precise question and pause implementation.
 
-1. Install packages from project root:
+## Preconditions
 
-   ```bash
-   npm install @nestjs/swagger @nestjs/config
-   ```
+1. Confirm the target is a NestJS project with `main.ts` and a root module.
+2. Confirm Node and dependency compatibility for the workspace.
+3. Confirm write access to source files and environment files.
 
-2. Verify version alignment:
+If preconditions fail, stop and report the exact blocker.
+
+## Deterministic Workflow
+
+1. Install required dependencies from project root:
+   - `@nestjs/swagger`
+   - `@nestjs/config`
+2. Verify major-version alignment:
    - Nest 11 -> `@nestjs/swagger` ^11
    - Nest 10 -> `@nestjs/swagger` ^10
-   - `@nestjs/config` should match supported Nest peer ranges.
-3. Resolve any peer dependency warnings before wiring docs.
-
-## ConfigModule
-
-Import `ConfigModule` in `AppModule` so `ConfigService` is available at bootstrap:
-
-- Add `ConfigModule.forRoot({ isGlobal: true })` to the `imports` array of `AppModule`.
-- Keep `.env` loading global unless the project already has a different config strategy.
-
-## Swagger wiring
-
-1. Create a reusable setup function using [reference.md](reference.md):
+3. Ensure `ConfigModule.forRoot({ isGlobal: true })` is configured in the root module (or preserve an equivalent existing global config strategy).
+4. Create or repair bootstrap helper using [reference.md](reference.md):
    - `src/libs/swagger/setup-swagger.ts`
-2. In `main.ts`, call `setupSwagger(app)` after app creation and before `app.listen(...)`.
-3. Prefer bootstrap-level setup over creating an extra global Swagger module/service unless the project architecture explicitly needs it.
+5. Wire `setupSwagger(app)` in `main.ts` after app creation and before `listen(...)`.
+6. Create or update `.env` keys for Swagger behavior:
+   - `SWAGGER_ENABLED`
+   - `SWAGGER_PATH`
+   - `SWAGGER_UI_ENABLED`
+   - `SWAGGER_RAW_ENABLED`
+   - `SWAGGER_JSON_URL`
+   - `SWAGGER_USE_GLOBAL_PREFIX`
+   - optional `SWAGGER_BEARER_AUTH`
+7. Ensure `.env` is ignored by git when repository policy requires local secrets.
+8. Preserve unrelated project code and avoid refactoring outside Swagger/config scope.
 
-## .env setup
+## Route Rules
 
-Create or update `.env` in the project root. Do not commit secrets; ensure `.env` is in `.gitignore`.
+- Default docs path: `SWAGGER_PATH=api/docs`
+- Default JSON route segment: `SWAGGER_JSON_URL=openapi.json`
+- If `SWAGGER_USE_GLOBAL_PREFIX=true`, JSON endpoint is prefixed by the app global prefix.
+- If `SWAGGER_UI_ENABLED=false`, only raw definition endpoints are served when `SWAGGER_RAW_ENABLED=true`.
+- If both UI and raw are disabled, no Swagger surface should be exposed.
 
-Use this template (defaults match the reference implementation):
+## Security Defaults
 
-```env
-PORT=3000
+- Default production stance: `SWAGGER_ENABLED=false` unless explicitly required.
+- If enabled in production, require upstream protection (gateway auth, app guard, or network allowlist).
+- Do not use sensitive secrets as feature flags for Swagger enablement.
 
-# Swagger (OpenAPI)
-SWAGGER_ENABLED=true
-SWAGGER_PATH=api/docs
-SWAGGER_TITLE=API
-SWAGGER_DESCRIPTION=HTTP API documentation
-SWAGGER_VERSION=1.0.0
-SWAGGER_UI_ENABLED=true
-SWAGGER_RAW_ENABLED=true
-SWAGGER_JSON_URL=openapi.json
-SWAGGER_USE_GLOBAL_PREFIX=false
+## Verification Gates
 
-# Optional: enable bearer auth scheme in docs
-SWAGGER_BEARER_AUTH=false
-```
+1. Start the app (`start` or `start:dev`).
+2. Validate docs UI route when enabled:
+   - `http://localhost:<PORT>/<SWAGGER_PATH>`
+3. Validate OpenAPI JSON route when raw is enabled:
+   - without prefix: `http://localhost:<PORT>/<SWAGGER_JSON_URL>`
+   - with prefix: `http://localhost:<PORT>/<global-prefix>/<SWAGGER_JSON_URL>`
+4. Validate bearer auth button only when `SWAGGER_BEARER_AUTH=true`.
+5. Validate the Swagger top bar includes the `Download OpenAPI` button pointing to configured JSON route.
+6. Report exact pass/fail status for each gate.
 
-UI default:
-- The Swagger setup includes an automatic top-bar `Download OpenAPI` button that points to the generated JSON schema route.
+## Failure Handling
 
-Security defaults:
-- Set `SWAGGER_ENABLED=false` in production unless docs must be public.
-- If docs stay enabled in production, protect the route (gateway auth, app guard, or IP allowlist).
-- Do not use JWT secrets as feature flags for Swagger behavior.
+- If dependency installation fails, report command and error context and stop before partial wiring.
+- If required files are missing (`main.ts`, root module), stop and request the correct project path.
+- If an existing Swagger setup is present, perform minimal edits instead of replacing unrelated options.
 
-## Optional: CLI plugin
+## Deliverables
 
-For larger projects, enable the Swagger CLI plugin to reduce DTO decorator boilerplate:
-- Add `@nestjs/swagger` plugin under `compilerOptions.plugins` in `nest-cli.json`.
-- Keep runtime validators (`class-validator`) in DTOs.
-- Import mapped type utilities from `@nestjs/swagger` so schemas are generated correctly.
-
-## Verification
-
-1. Run the app (e.g. `npm run start:dev`).
-2. Open docs route:
-   - `http://localhost:PORT/SWAGGER_PATH`
-3. Open raw JSON:
-   - `http://localhost:PORT/SWAGGER_JSON_URL` (when `SWAGGER_RAW_ENABLED=true` and `SWAGGER_USE_GLOBAL_PREFIX=false`)
-   - `http://localhost:PORT/<global-prefix>/SWAGGER_JSON_URL` (when `SWAGGER_USE_GLOBAL_PREFIX=true`)
-4. Confirm UI and/or raw endpoints match toggles (`SWAGGER_UI_ENABLED`, `SWAGGER_RAW_ENABLED`).
-5. If `SWAGGER_BEARER_AUTH=true`, confirm "Authorize" is shown.
-6. Confirm the automatic `Download OpenAPI` button is visible in the Swagger UI top bar.
+- Updated dependency manifest
+- Updated root module config import/wiring
+- Updated `main.ts` bootstrap call
+- Added or updated `src/libs/swagger/setup-swagger.ts`
+- Added or updated `.env` Swagger variables
+- Verification summary with concrete tested routes
 
 ## Checklist
 
-- [ ] Install `@nestjs/swagger` and `@nestjs/config`; align major versions
-- [ ] Enable `ConfigModule.forRoot({ isGlobal: true })`
-- [ ] Add `setupSwagger(app)` from [reference.md](reference.md) and call it in `main.ts`
-- [ ] Create or update `.env` with `SWAGGER_*` keys
-- [ ] Ensure `.env` is listed in `.gitignore`
-- [ ] Verify UI and JSON endpoints at configured routes
-- [ ] Verify automatic `Download OpenAPI` button appears in Swagger UI
+- [ ] Dependencies installed and version-aligned
+- [ ] `ConfigModule` globally available
+- [ ] `setupSwagger` helper added or repaired
+- [ ] `setupSwagger(app)` called before `listen(...)`
+- [ ] `.env` contains required `SWAGGER_*` keys
+- [ ] Swagger exposure matches UI/raw/global-prefix toggles
+- [ ] `Download OpenAPI` button visible and functional when UI enabled
+- [ ] Verification results documented with exact routes
 
-## Additional resources
+## Additional Resources
 
-- Full implementation with env toggles: [reference.md](reference.md)
-- Minimal AppModule/main.ts snippets: [examples.md](examples.md)
-
+- Full implementation: [reference.md](reference.md)
+- Minimal snippets: [examples.md](examples.md)

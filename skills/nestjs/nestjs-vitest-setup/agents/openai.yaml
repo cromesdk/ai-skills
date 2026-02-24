@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Vitest"
+  short_description: "Set up and migrate NestJS tests to Vitest"
+  default_prompt: "Use $nestjs-vitest-setup to install Vitest and migrate this NestJS test setup."

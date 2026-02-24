@@ -1,6 +1,6 @@
 ---
 name: typescript-tsup-setup
-description: Install and configure tsup for TypeScript library builds (ESM/CJS with declarations) and Node.js app bundles. Use when a user asks to add tsup, replace or modernize build scripts, fix tsup config or package exports, or verify tsup build output in a TypeScript project.
+description: Install, repair, or standardize tsup in TypeScript projects for library and Node app builds. Use when users ask to add tsup, set ESM/CJS outputs, generate `.d.ts`, fix `package.json` `exports`/entry fields, replace legacy build scripts, or verify dist artifacts and runtime entry resolution.
 ---
 
 # Setup TSup
@@ -23,6 +23,7 @@ Use this workflow to set up tsup with minimal, production-safe defaults.
    - Detect package manager from lockfile (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`).
    - Detect module mode from `package.json.type`.
    - Confirm entry file(s) exist before writing config.
+   - If `tsup.config.ts` exists, back up intent by preserving non-default options unless they conflict with explicit user requirements.
 
 2. Ensure dependency
    - Install `tsup` as a dev dependency if missing:
@@ -73,6 +74,7 @@ export default defineConfig({
      - `"build": "tsup"`
      - `"build:watch": "tsup --watch"` when `addWatchScript = true`
    - For apps, add a production start script that matches output filename.
+   - Preserve unrelated existing scripts.
 
 6. Align package entry fields for libraries
    - Ensure `main`, `module`, `types`, and `exports` point to generated files.
@@ -100,8 +102,9 @@ outExtension({ format }) {
 ```
 
 7. Verify
-   - Run `npm run build` (or project package-manager equivalent).
+   - Run `npm run build` / `pnpm build` / `yarn build` based on detected package manager.
    - Confirm expected artifacts exist in `dist/`.
+   - For libraries, verify `package.json` entry fields point to actual emitted files.
    - For apps, run built output with `node` to confirm runtime resolution.
 
 ## Guardrails
@@ -111,6 +114,7 @@ outExtension({ format }) {
 - Do not overwrite non-trivial existing config; merge minimally.
 - For monorepos, run install and build in the package directory, not the repo root.
 - Note: tsup upstream is in maintenance mode. Keep using tsup when requested; suggest tsdown only if the user asks about long-term migration.
+- Use Node package entry conventions conservatively: treat `exports` as authoritative when present, and keep `main` for backward compatibility where needed.
 
 ## Output checklist
 

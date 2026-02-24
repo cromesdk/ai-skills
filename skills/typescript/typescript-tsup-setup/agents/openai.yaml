@@ -1,4 +1,4 @@
 interface:
   display_name: "TypeScript TSup Setup"
-  short_description: "Install and configure tsup builds for TypeScript"
-  default_prompt: "Use $typescript-tsup-setup to install and configure tsup in this TypeScript project."
+  short_description: "Install, fix, and verify tsup build setup for TypeScript libraries and Node apps"
+  default_prompt: "Use $typescript-tsup-setup to add or repair tsup config, scripts, and package exports for this TypeScript project, then verify build output."

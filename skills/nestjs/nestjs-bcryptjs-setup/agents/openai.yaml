@@ -1,4 +1,4 @@
 interface:
   display_name: "NestJS bcryptjs Setup"
-  short_description: "Add bcryptjs hashing with ConfigModule SALT_ROUNDS"
-  default_prompt: "Use $nestjs-bcryptjs-setup to install bcryptjs and wire a reusable hash/verify EncryptionService in this NestJS backend."
+  short_description: "Install, repair, and verify NestJS bcryptjs hash/verify wiring with SALT_ROUNDS validation"
+  default_prompt: "Use $nestjs-bcryptjs-setup to add or fix bcryptjs in this NestJS backend, centralize hashing in EncryptionService and EncryptionModule, validate SALT_ROUNDS via ConfigModule, and verify build/test plus hash/compare behavior."

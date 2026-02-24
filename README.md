@@ -1,87 +1,103 @@
-# AI-Skills & Rules
+# CromeSDK Angular Skills Repository
 
-A curated repository of reusable agent skills and operational rules, with a strong Angular 20 focus.  
-Each skill is a focused workflow with deterministic steps, agent metadata, and scenario tests.
+Curated, reusable agent skills for Angular- and Figma-centric engineering workflows, organized for deterministic execution and repeatable quality checks.
 
-![Language](https://img.shields.io/badge/language-Markdown-000000?logo=markdown)
-![Framework](https://img.shields.io/badge/framework-Angular%2020-DD0031?logo=angular&logoColor=white)
-![Skills](https://img.shields.io/badge/skills-12-0A7EA4)
-[![License](https://img.shields.io/badge/license-MIT-2EA44F)](./LICENSE)
+## Overview and Scope
 
-## What This Repo Provides
+This repository stores skill packages used by coding assistants.  
+Each skill package is self-contained and follows a common contract:
 
-- A local skill catalog under `.agents/skills/`.
-- Angular 20-focused setup, architecture, quality, and tooling workflows.
-- Skill organization by domain under `.agents/skills/angular/` and `.agents/skills/figma/`.
-- A consistent skill contract per package:
-  - `SKILL.md`
-  - `agents/openai.yaml`
-  - `tests/scenarios.md`
+- `SKILL.md` (workflow and rules)
+- `agents/openai.yaml` (interface metadata)
+- `tests/scenarios.md` (evaluation scenarios)
+
+Scope includes skill authoring, skill maintenance, and scenario coverage for Angular, Figma, Codex, and project-level documentation workflows.
+
+## Architecture at a Glance
+
+The repository uses a domain-first folder model under `.agents/skills`.
+
+| Domain | Purpose | Path |
+|---|---|---|
+| `angular` | Angular app/tooling workflows | `.agents/skills/angular` |
+| `figma` | Figma-to-code workflows | `.agents/skills/figma` |
+| `codex` | Assistant behavior hardening workflows | `.agents/skills/codex` |
+| `project` | Project documentation maintenance workflows | `.agents/skills/project` |
 
 ## Prerequisites
 
-- A coding-agent environment that can load and execute `SKILL.md` instructions.
-- Node.js + npm for skills that run Angular CLI or package-manager commands.
+- Git (to inspect and update repository changes).
+- A coding-assistant runtime that can execute skill instructions from `SKILL.md`.
+- Node.js/npm only when a specific skill requires Angular CLI/package commands.
 
 ## Quick Start
 
-1. Open this repo as your working directory.
-2. Reference a skill directly in your prompt.
+1. Open this repository as the active workspace.
+2. Select a skill and invoke it by name in your prompt.
+3. Review generated/updated files and scenario coverage.
+
+Example invocations:
 
 ```text
-[$angular-app-setup](.agents/skills/angular/angular-app-setup/SKILL.md)
-Create an Angular 20 app in this folder named "shop-ui".
+$readme-updater Update the root README to enterprise quality.
+$changelog-keepachangelog-update Update CHANGELOG.md from current git changes.
 ```
 
-## Skills
+## Configuration and Environment Variables
 
-| Skill | Purpose | Path |
-|---|---|---|
-| `angular-app-setup` | Create Angular 20 apps in-place with deterministic, non-interactive defaults. | `.agents/skills/angular/angular-app-setup/SKILL.md` |
-| `angular-capacitor-setup` | Add or repair Capacitor integration for Angular projects. | `.agents/skills/angular/angular-capacitor-setup/SKILL.md` |
-| `angular-component-rule` | Enforce companion-file and structure rules for Angular components. | `.agents/skills/angular/angular-component-rule/SKILL.md` |
-| `angular-folder-structure` | Define and enforce feature-first Angular app architecture. | `.agents/skills/angular/angular-folder-structure/SKILL.md` |
-| `angular-json-server-setup` | Add or repair local `json-server` mock API flows for Angular. | `.agents/skills/angular/angular-json-server-setup/SKILL.md` |
-| `angular-lucide-icons-setup` | Install and verify `lucide-angular` icon wiring. | `.agents/skills/angular/angular-lucide-icons-setup/SKILL.md` |
-| `angular-pwa-setup` | Add or repair Angular PWA support and service worker validation. | `.agents/skills/angular/angular-pwa-setup/SKILL.md` |
-| `angular-runtime-i18n-setup` | Add or repair runtime language switching with persisted preference support. | `.agents/skills/angular/angular-runtime-i18n-setup/SKILL.md` |
-| `angular-storybook-setup` | Install and align Storybook for Angular 20 + Tailwind workflows. | `.agents/skills/angular/angular-storybook-setup/SKILL.md` |
-| `angular-supabase-connector-setup` | Create DI-first Supabase connector wiring with optional API adapter bridge. | `.agents/skills/angular/angular-supabase-connector-setup/SKILL.md` |
-| `angular-tailwind-setup` | Install or repair Tailwind CSS v4 setup in Angular 20 workspaces. | `.agents/skills/angular/angular-tailwind-setup/SKILL.md` |
-| `angular-vitest-setup` | Migrate Angular unit tests from Karma/Jasmine to Vitest. | `.agents/skills/angular/angular-vitest-setup/SKILL.md` |
+Not applicable: no repository-level `.env` or `.env.example` files are present at this time.
 
-## Repository Layout
+## Development Workflow (Test/Lint/Build)
 
-```text
-.agents/skills/
-  angular/
-    <skill-name>/
-      SKILL.md
-      agents/openai.yaml
-      tests/scenarios.md
-  figma/
-    <skill-name>/
-      SKILL.md
-      agents/openai.yaml
-      tests/scenarios.md
-```
+Not applicable at repository root: no root `package.json` is present, so no root build/lint/test command catalog exists.
 
-## Authoring Rules
+Validation workflow used for skills:
 
-- Keep each skill single-purpose and deterministic.
-- Include explicit preflight checks before file edits.
-- Keep instructions non-destructive by default.
-- Update `tests/scenarios.md` whenever behavior changes.
-- Keep `agents/openai.yaml` aligned with the current trigger intent and workflow.
+- Keep each skill limited to one responsibility.
+- Keep `agents/openai.yaml` aligned with `SKILL.md`.
+- Keep `tests/scenarios.md` updated for easy/hard/edge cases.
 
-## Contributing
+## Operations and Troubleshooting
 
-1. Add or update skills in `.agents/skills/<domain>/<skill-name>/`.
-2. Validate command/path accuracy in `SKILL.md`.
-3. Add or revise `tests/scenarios.md` to cover easy, hard, and edge cases.
-4. Update `agents/openai.yaml` so interface metadata matches behavior.
-5. Open a PR with behavior deltas and verification notes.
+Operational checks:
 
-## License
+- Confirm skill path exists before invocation.
+- Confirm companion files exist:
+  - `SKILL.md`
+  - `agents/openai.yaml`
+  - `tests/scenarios.md`
+- If a target file is missing for an update request, ask one precise clarification question before creating new files.
 
-MIT. See `LICENSE`.
+Common issue:
+
+- Skill not discoverable
+  - Verify frontmatter `name` and `description` in `SKILL.md` are accurate and trigger-friendly.
+
+## Deployment and Release
+
+Not applicable: no deployment manifests, packaging pipeline, or release automation are defined in this repository.
+
+## Security and Compliance
+
+- Do not add unverifiable security/compliance claims to docs.
+- Keep license metadata explicit (`LICENSE` is present; MIT).
+- Do not commit secrets; no secrets-management workflow is defined in this repo.
+- Compliance posture details are `TBD (owner needed)`.
+
+## Contributing and Code Standards
+
+1. Add or update a skill under `.agents/skills/<domain>/<skill-name>/`.
+2. Keep instructions deterministic and non-destructive by default.
+3. Update `tests/scenarios.md` when behavior changes.
+4. Keep `agents/openai.yaml` metadata aligned with skill behavior.
+5. Validate structural integrity before merge.
+
+## Ownership, Support, and Escalation
+
+- Primary owner: `TBD (owner needed)`.
+- Support channel: `TBD (owner needed)`.
+- Escalation path: `TBD (owner needed)`.
+
+## License and Legal Notices
+
+This project is licensed under MIT. See [LICENSE](./LICENSE).

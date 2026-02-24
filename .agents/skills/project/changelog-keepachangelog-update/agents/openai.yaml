@@ -1,0 +1,4 @@
+interface:
+  display_name: "Changelog Keep a Changelog Update"
+  short_description: "Update CHANGELOG.md from current repo changes using Keep a Changelog 1.0.0"
+  default_prompt: "Update the repository CHANGELOG.md using Keep a Changelog 1.0.0 based on current git changes, keep an accurate Unreleased section, and avoid unverifiable entries."

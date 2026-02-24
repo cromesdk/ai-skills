@@ -1,0 +1,4 @@
+interface:
+  display_name: "README Updater"
+  short_description: "Deterministic evidence-based README create/audit/rewrite workflow"
+  default_prompt: "Audit, create, or update the target README.md using verified repository evidence, then return the updated README, a compact unresolved-gap report, and a verification summary for commands, paths/links, and claim accuracy."

@@ -1,6 +1,6 @@
 ---
 name: angular-capacitor-setup
-description: Add, repair, or validate Capacitor in Angular 20 workspaces with deterministic setup: dependency install, `cap init`, `webDir` resolution from `angular.json`, native platform add/open (`android`/`ios`), and build-plus-sync verification. Use when users ask to enable mobile builds, fix broken Capacitor wiring, or standardize Angular-to-native sync workflows.
+description: Add, repair, or validate Capacitor in Angular 20 workspaces with deterministic setup for dependency install, cap init, webDir resolution from angular.json, native platform add/open (android/ios), and build-plus-sync verification. Use when users ask to enable mobile builds, fix broken Capacitor wiring, or standardize Angular-to-native sync workflows.
 ---
 
 # Angular 20 Capacitor Setup

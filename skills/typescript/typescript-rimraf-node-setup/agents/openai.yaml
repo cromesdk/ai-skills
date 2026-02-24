@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Rimraf Node Setup"
+  short_description: "Audit and standardize cross-platform Node/TypeScript cleanup scripts with rimraf"
+  default_prompt: "Inspect package.json cleanup scripts, detect package manager from lockfiles, replace shell-specific delete commands with deterministic rimraf commands, preserve script names unless requested, and verify clean plus prebuild/build behavior. If package.json is missing, stop and request the correct project path."

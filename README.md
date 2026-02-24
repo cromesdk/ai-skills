@@ -1,4 +1,4 @@
-# CromeSDK Angular Skills Repository
+# CromeSDK AI Skills Repository
 
 Curated, reusable agent skills for Angular- and Figma-centric engineering workflows, organized for deterministic execution and repeatable quality checks.
 

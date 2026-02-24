@@ -1,5 +1,10 @@
 # CromeSDK AI Skills Repository
 
+<p align="center">
+  <img src="assets/logo.svg" alt="Project logo" />
+</p>
+
+
 Curated, reusable agent skills for Angular- and Figma-centric engineering workflows, organized for deterministic execution and repeatable quality checks.
 
 ## Overview and Scope
@@ -11,7 +16,7 @@ Each skill package is self-contained and follows a common contract:
 - `agents/openai.yaml` (interface metadata)
 - `tests/scenarios.md` (evaluation scenarios)
 
-Scope includes skill authoring, skill maintenance, and scenario coverage for Angular, Figma, Codex, and project-level documentation workflows.
+Scope includes skill authoring, skill maintenance, and scenario coverage across Angular, Figma, NestJS, TypeScript, Python, Codex, and project-level documentation workflows.
 
 ## Architecture at a Glance
 
@@ -21,6 +26,9 @@ The repository uses a domain-first folder model under `skills`.
 |---|---|---|
 | `angular` | Angular app/tooling workflows | `skills/angular` |
 | `figma` | Figma-to-code workflows | `skills/figma` |
+| `nestjs` | NestJS backend/workflow setup patterns | `skills/nestjs` |
+| `typescript` | TypeScript tooling/setup workflows | `skills/typescript` |
+| `python` | Python-focused workflows and utilities | `skills/python` |
 | `codex` | Assistant behavior hardening workflows | `skills/codex` |
 | `project` | Project documentation maintenance workflows | `skills/project` |
 

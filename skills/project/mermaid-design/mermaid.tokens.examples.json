@@ -1,0 +1,86 @@
+{
+  "usageOrder": [
+    "Load mermaid.tokens.json as canonical token source.",
+    "Pick a preset from presets.* as the base for new diagrams.",
+    "Apply only minimal overrides requested by the user."
+  ],
+  "presets": {
+    "sleekLight": {
+      "description": "Balanced pastel palette for general product diagrams.",
+      "theme": "base",
+      "themeVariables": {
+        "darkMode": false,
+        "background": "#f4f4f4",
+        "fontFamily": "trebuchet ms, verdana, arial",
+        "fontSize": "16px",
+        "primaryColor": "#fff4dd",
+        "primaryTextColor": "#2f2f2f",
+        "primaryBorderColor": "#e7bf67",
+        "secondaryColor": "#dff4ff",
+        "secondaryTextColor": "#17324d",
+        "secondaryBorderColor": "#83c9ee",
+        "tertiaryColor": "#e6ffe0",
+        "tertiaryTextColor": "#1e4026",
+        "tertiaryBorderColor": "#93cc86",
+        "lineColor": "#6f7f8a",
+        "noteBkgColor": "#fff5ad",
+        "noteTextColor": "#333",
+        "noteBorderColor": "#d7c25b"
+      }
+    },
+    "sleekDark": {
+      "description": "Dark slate palette with vivid accents for dashboards and architecture views.",
+      "theme": "base",
+      "themeVariables": {
+        "darkMode": true,
+        "background": "#101418",
+        "fontFamily": "trebuchet ms, verdana, arial",
+        "fontSize": "16px",
+        "primaryColor": "#1f2a36",
+        "primaryTextColor": "#e8edf2",
+        "primaryBorderColor": "#4f6b88",
+        "secondaryColor": "#1f3a4a",
+        "secondaryTextColor": "#d9f4ff",
+        "secondaryBorderColor": "#5aa9d6",
+        "tertiaryColor": "#203625",
+        "tertiaryTextColor": "#d9f7dd",
+        "tertiaryBorderColor": "#6cbf78",
+        "lineColor": "#7f93a6",
+        "noteBkgColor": "#3a3318",
+        "noteTextColor": "#f6efcf",
+        "noteBorderColor": "#b9a968"
+      }
+    },
+    "presentationWarm": {
+      "description": "High-legibility warm palette for docs and slide decks.",
+      "theme": "base",
+      "themeVariables": {
+        "darkMode": false,
+        "background": "#fffaf3",
+        "fontFamily": "trebuchet ms, verdana, arial",
+        "fontSize": "16px",
+        "primaryColor": "#ffe7c2",
+        "primaryTextColor": "#2e2215",
+        "primaryBorderColor": "#d8a454",
+        "secondaryColor": "#ffe3de",
+        "secondaryTextColor": "#4b2320",
+        "secondaryBorderColor": "#dd8f87",
+        "tertiaryColor": "#fff2cf",
+        "tertiaryTextColor": "#3a2d14",
+        "tertiaryBorderColor": "#e1bb62",
+        "lineColor": "#8b7c68",
+        "noteBkgColor": "#fff5ad",
+        "noteTextColor": "#3c3222",
+        "noteBorderColor": "#d7c25b"
+      }
+    }
+  },
+  "diagramInitTemplates": {
+    "flowchart": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"background\":\"#f4f4f4\",\"primaryColor\":\"#fff4dd\",\"primaryBorderColor\":\"#e7bf67\",\"primaryTextColor\":\"#2f2f2f\",\"secondaryColor\":\"#dff4ff\",\"secondaryBorderColor\":\"#83c9ee\",\"secondaryTextColor\":\"#17324d\",\"tertiaryColor\":\"#e6ffe0\",\"tertiaryBorderColor\":\"#93cc86\",\"tertiaryTextColor\":\"#1e4026\",\"lineColor\":\"#6f7f8a\"}}}%%",
+    "sequence": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"background\":\"#f4f4f4\",\"actorBkg\":\"#fff4dd\",\"actorBorder\":\"#e7bf67\",\"actorTextColor\":\"#2f2f2f\",\"signalColor\":\"#31424f\",\"signalTextColor\":\"#31424f\",\"activationBkgColor\":\"#dff4ff\",\"activationBorderColor\":\"#83c9ee\"}}}%%",
+    "class": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"background\":\"#f4f4f4\",\"primaryColor\":\"#fff4dd\",\"primaryBorderColor\":\"#e7bf67\",\"textColor\":\"#263746\"}}}%%",
+    "state": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"background\":\"#f4f4f4\",\"primaryColor\":\"#fff4dd\",\"primaryBorderColor\":\"#e7bf67\",\"tertiaryColor\":\"#e6ffe0\"}}}%%",
+    "pie": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"pie1\":\"#fff4dd\",\"pie2\":\"#dff4ff\",\"pie3\":\"#e6ffe0\",\"pie4\":\"#ffd9c2\",\"pie5\":\"#d9e7ff\",\"pie6\":\"#f9e1ff\",\"pieStrokeColor\":\"#2f2f2f\",\"pieStrokeWidth\":\"2px\"}}}%%",
+    "gantt": "%%{init: {\"theme\":\"base\",\"themeVariables\":{\"background\":\"#f4f4f4\",\"primaryColor\":\"#fff4dd\",\"primaryTextColor\":\"#2f2f2f\",\"lineColor\":\"#6f7f8a\"}}}%%"
+  }
+}

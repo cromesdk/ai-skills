@@ -1,0 +1,91 @@
+{
+  "themeVariables": {
+    "darkMode": false,
+    "background": "#f4f4f4",
+    "fontFamily": "trebuchet ms, verdana, arial",
+    "fontSize": "16px",
+    "primaryColor": "#fff4dd",
+    "primaryTextColor": "calculated from darkMode #ddd/#333",
+    "secondaryColor": "calculated from primaryColor",
+    "primaryBorderColor": "calculated from primaryColor",
+    "secondaryBorderColor": "calculated from secondaryColor",
+    "secondaryTextColor": "calculated from secondaryColor",
+    "tertiaryColor": "calculated from primaryColor",
+    "tertiaryBorderColor": "calculated from tertiaryColor",
+    "tertiaryTextColor": "calculated from tertiaryColor",
+    "noteBkgColor": "#fff5ad",
+    "noteTextColor": "#333",
+    "noteBorderColor": "calculated from noteBkgColor",
+    "lineColor": "calculated from background",
+    "textColor": "calculated from primaryTextColor",
+    "mainBkg": "calculated from primaryColor",
+    "errorBkgColor": "tertiaryColor",
+    "errorTextColor": "tertiaryTextColor"
+  },
+  "flowchart": {
+    "nodeBorder": "primaryBorderColor",
+    "clusterBkg": "tertiaryColor",
+    "clusterBorder": "tertiaryBorderColor",
+    "defaultLinkColor": "lineColor",
+    "titleColor": "tertiaryTextColor",
+    "edgeLabelBackground": "calculated from secondaryColor",
+    "nodeTextColor": "primaryTextColor"
+  },
+  "sequence": {
+    "actorBkg": "mainBkg",
+    "actorBorder": "primaryBorderColor",
+    "actorTextColor": "primaryTextColor",
+    "actorLineColor": "actorBorder",
+    "signalColor": "textColor",
+    "signalTextColor": "textColor",
+    "labelBoxBkgColor": "actorBkg",
+    "labelBoxBorderColor": "actorBorder",
+    "labelTextColor": "actorTextColor",
+    "loopTextColor": "actorTextColor",
+    "activationBorderColor": "calculated from secondaryColor",
+    "activationBkgColor": "secondaryColor",
+    "sequenceNumberColor": "calculated from lineColor"
+  },
+  "pie": {
+    "pie1": "primaryColor",
+    "pie2": "secondaryColor",
+    "pie3": "calculated from tertiary",
+    "pie4": "calculated from primaryColor",
+    "pie5": "calculated from secondaryColor",
+    "pie6": "calculated from tertiaryColor",
+    "pie7": "calculated from primaryColor",
+    "pie8": "calculated from primaryColor",
+    "pie9": "calculated from primaryColor",
+    "pie10": "calculated from primaryColor",
+    "pie11": "calculated from primaryColor",
+    "pie12": "calculated from primaryColor",
+    "pieTitleTextSize": "25px",
+    "pieTitleTextColor": "taskTextDarkColor",
+    "pieSectionTextSize": "17px",
+    "pieSectionTextColor": "textColor",
+    "pieLegendTextSize": "17px",
+    "pieLegendTextColor": "taskTextDarkColor",
+    "pieStrokeColor": "black",
+    "pieStrokeWidth": "2px",
+    "pieOuterStrokeWidth": "2px",
+    "pieOuterStrokeColor": "black",
+    "pieOpacity": "0.7"
+  },
+  "state": {
+    "labelColor": "primaryTextColor",
+    "altBackground": "tertiaryColor"
+  },
+  "class": {
+    "classText": "textColor"
+  },
+  "journey": {
+    "fillType0": "primaryColor",
+    "fillType1": "secondaryColor",
+    "fillType2": "calculated from primaryColor",
+    "fillType3": "calculated from secondaryColor",
+    "fillType4": "calculated from primaryColor",
+    "fillType5": "calculated from secondaryColor",
+    "fillType6": "calculated from primaryColor",
+    "fillType7": "calculated from secondaryColor"
+  }
+}

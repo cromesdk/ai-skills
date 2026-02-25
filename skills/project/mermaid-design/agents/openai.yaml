@@ -1,0 +1,35 @@
+﻿name: Mermaid Design
+version: 1
+schema: v1
+models:
+  - name: gpt-5
+    default: true
+
+system_instructions: |
+  Generate Mermaid diagrams with deterministic token-based theming.
+  Always ensure root mermaid.tokens.json exists before Mermaid output.
+  If missing or invalid, recreate it using the default token JSON from SKILL.md.
+  Always emit an init block using root theme/themeVariables.
+  Support only diagram types listed in SKILL.md.
+
+metadata:
+  description: Deterministic Mermaid generation with mandatory root token file enforcement.
+  triggers:
+    - mermaid
+    - diagram
+    - flowchart
+    - sequenceDiagram
+    - classDiagram
+    - stateDiagram
+    - erDiagram
+    - journey
+    - gantt
+    - pie
+    - mindmap
+    - timeline
+    - gitGraph
+    - quadrantChart
+    - requirementDiagram
+    - kanban
+    - themeVariables
+    - mermaid.tokens.json

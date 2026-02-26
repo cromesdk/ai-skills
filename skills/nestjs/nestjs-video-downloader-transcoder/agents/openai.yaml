@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Downloader + Transcoder"
+  short_description: "Maintain the existing NestJS video downloader/transcoder controller + service pipeline"
+  default_prompt: "Update the existing VideoDownloaderTranscoderModule under src/libs/video-downloader-transcoder to keep its DTOs, yt-dlp download stage, ffmpeg-static transcoding, quality/format enums, preview-image support, env-driven controls, and structured logging aligned with current implementation."

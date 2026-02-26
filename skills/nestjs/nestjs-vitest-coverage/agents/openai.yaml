@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Vitest Coverage"
+  short_description: "Upgrade and fix coverage in NestJS Vitest projects"
+  default_prompt: "Use $nestjs-vitest-coverage to update Vitest coverage config, thresholds, and tests in this NestJS project."

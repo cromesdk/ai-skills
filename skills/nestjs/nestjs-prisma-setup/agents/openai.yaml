@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Prisma Setup"
+  short_description: "Set up Prisma ORM in NestJS backends"
+  default_prompt: "Use $nestjs-prisma-setup to install Prisma and wire PrismaService and PrismaModule in this NestJS backend."

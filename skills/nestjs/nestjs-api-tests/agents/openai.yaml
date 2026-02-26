@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS API Tests"
+  short_description: "Deterministic NestJS API e2e test generation and repair with runner reuse, bootstrap parity, and JWT scenario coverage"
+  default_prompt: "Implement or update NestJS API end-to-end tests by reusing the repository's existing e2e runner and conventions, mirroring src/main.ts bootstrap behavior in tests, detecting whether JWT auth is configured, adding login/protected-route/invalid-token scenarios when auth exists, and verifying with the repository e2e test command before finalizing."

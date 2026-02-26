@@ -1,18 +1,20 @@
 ---
 name: api-tests
-description: Generate and maintain NestJS API end-to-end tests with Vitest and Supertest, including JWT login and protected-route coverage when authentication is configured. Use when adding or updating endpoint tests, creating e2e coverage for controllers, or implementing auth/JWT API test scenarios.
+description: Create, repair, and extend NestJS API end-to-end tests using the repository's existing runner (Vitest/Jest) plus Supertest, with deterministic auth detection and JWT protected-route coverage when configured. Use when users ask to add controller endpoint e2e tests, fix failing API tests, add auth/login token scenarios, or improve API test reliability before CI/release.
 ---
 
 # NestJS API Tests (e2e)
 
-## Workflow
+## Deterministic Workflow
 
-1. Inspect project test setup (`package.json`, `vitest*.config.*`, `test/`).
-2. Reuse the existing e2e runner and naming conventions.
-3. Add or update `test/**/*.e2e-spec.ts` files by feature/controller.
-4. Mirror production bootstrap behavior (global pipes/guards/interceptors that affect HTTP behavior).
-5. Add JWT scenarios when auth is configured.
-6. Run e2e tests and fix failures before finishing.
+1. Inspect test setup first: `package.json`, `test/`, `vitest*.config.*`, `jest*.config.*`, and e2e scripts.
+2. Reuse the repository's existing e2e runner and conventions. Never introduce a second e2e runner.
+3. Identify target endpoints/controllers and map expected success plus failure behavior.
+4. Add or update `test/**/*.e2e-spec.ts` files per feature/controller.
+5. Mirror production bootstrap behavior from `src/main.ts` for all global HTTP-affecting configuration.
+6. Detect whether JWT auth is configured using the rules in this file and [reference.md](reference.md).
+7. If JWT auth exists, add the full JWT scenario matrix.
+8. Run the project e2e command, fix failures, and report exact verification results.
 
 ## Keep Existing Test Runner
 
@@ -25,7 +27,7 @@ description: Generate and maintain NestJS API end-to-end tests with Vitest and S
 
 ## Mirror Production App Bootstrap
 
-Apply the same app-level behavior as `src/main.ts` so tests match runtime behavior. At minimum, mirror `ValidationPipe` options and other global middleware that changes request/response behavior.
+Apply the same app-level behavior as `src/main.ts` so tests match runtime behavior. At minimum, mirror `ValidationPipe` options and all global middleware/interceptors/filters/guards that change HTTP behavior.
 
 ```typescript
 import { ValidationPipe } from '@nestjs/common';
@@ -91,6 +93,7 @@ If login response keys differ (for example `token`), assert the real key used by
 - Use a dedicated test database when the app persists users/sessions.
 - Run migrations (or schema push) before e2e when required by the stack.
 - Use deterministic test credentials from seed/setup fixtures.
+- Do not depend on external network calls in e2e tests unless the repository already requires and mocks/stabilizes them.
 
 ## Test Lifecycle and Assertions
 
@@ -98,12 +101,14 @@ If login response keys differ (for example `token`), assert the real key used by
 - Always close app in `afterAll` (or `afterEach`) to avoid hanging handles.
 - Assert both status code and response shape for each endpoint.
 - Cover negative paths for validation and auth failures.
+- Prefer deterministic seed/setup data over implicit ordering between tests.
 
 ## Verification
 
 - Run project e2e command (`npm run test:e2e` or repository equivalent).
 - Ensure new tests pass with existing CI thresholds and lint rules.
 - Keep tests stable (no hidden ordering dependencies, no real external calls).
+- If tests are skipped or blocked, report the exact blocker and the next concrete command to unblock.
 
 ## Additional Resources
 

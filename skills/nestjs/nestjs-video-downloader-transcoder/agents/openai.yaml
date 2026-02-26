@@ -1,4 +1,4 @@
 interface:
   display_name: "Video Downloader + Transcoder"
-  short_description: "Maintain the existing NestJS video downloader/transcoder controller + service pipeline"
-  default_prompt: "Update the existing VideoDownloaderTranscoderModule under src/libs/video-downloader-transcoder to keep its DTOs, yt-dlp download stage, ffmpeg-static transcoding, quality/format enums, preview-image support, env-driven controls, and structured logging aligned with current implementation."
+  short_description: "Add, repair, and verify the existing NestJS video downloader/transcoder synchronous pipeline"
+  default_prompt: "Apply the video-downloader-transcoder skill to the existing NestJS module at src/libs/video-downloader-transcoder: preserve the POST /video-downloader-transcoder/transcode contract, keep DTO validation and format/quality enums aligned, enforce youtube-dl-exec plus ffmpeg-static subprocess safety, retain env-driven limits/overrides, keep structured stage logging, and verify cleanup/error-path behavior."

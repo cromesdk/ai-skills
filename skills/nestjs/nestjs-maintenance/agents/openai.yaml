@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Maintenance Verification"
+  short_description: "Run ordered backend quality gates (docs->clean->build->format->lint->test:cov) with fail-fix-rerun discipline"
+  default_prompt: "Use $nestjs-maintenance to verify this NestJS backend by running the maintenance pipeline scripts that exist in package.json in strict order (docs, clean, build, format, lint, test:cov), fixing failures, and rerunning from the first script until all pass in one uninterrupted run."

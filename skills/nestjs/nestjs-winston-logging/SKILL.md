@@ -1,86 +1,71 @@
 ---
 name: winston-logging-on-change
-description: Adds concise Winston logging when code is changed in a project that uses Winston (LoggerService). Use when modifying services, controllers, or app code in a NestJS backend that has Winston or LoggerModule installed. Never logs passwords, tokens, or other confidential data.
+description: Add, repair, and standardize concise Winston logging in changed NestJS backend code that already uses a shared LoggerService. Use when modifying controllers/services/guards/interceptors/strategies/handlers, improving observability quality, or enforcing safe logging that excludes secrets, tokens, and raw sensitive payloads.
 ---
 
 # Winston Logging On Change
 
-Apply concise, high-signal Winston logs when modifying NestJS app logic in a project that already uses a shared `LoggerService`.
+Apply high-signal, low-noise Winston logs when changing NestJS application logic in projects that already have Winston wiring.
 
-## Execute Workflow
+## Workflow
 
-1. Confirm logger wiring exists before adding logs.
-2. Identify changed application code (services, controllers, guards, interceptors, strategies, handlers).
-3. Add logs only around meaningful outcomes, decisions, and failures introduced or affected by the change.
-4. Keep all logs free of secrets and sensitive payloads.
-5. Verify the final diff for noise, duplication, and unsafe fields.
+1. Preflight project logger availability.
+   - Confirm the project already uses a shared `LoggerService` (or equivalent injected logger wrapper).
+   - If logger wiring is missing and the user did not ask for installation, stop and report that this skill only augments existing logging.
 
-If the project does not have Winston wiring, do not invent a logger pattern in this skill. Use the Winston setup skill first when the user asks for installation.
+2. Locate code touched by the requested change.
+   - Focus on changed NestJS runtime units: controllers, services, guards, interceptors, strategies, handlers, and background processors.
+   - Do not add logs in unrelated files.
 
-## Use Logger Correctly
+3. Identify meaningful log points introduced or affected by the change.
+   - Add logs around operation outcomes, important branch decisions, external dependency calls, retries, and failures.
+   - Skip trivial method entry/exit logs and passthrough helper noise.
 
-Inject the project logger into the class constructor, same as other Nest injectables.
+4. Insert logs with consistent context and level selection.
+   - Keep one stable class context per class (for example `AuthService`).
+   - Use levels intentionally: `log`/`info` for successful outcomes, `warn` for degraded but handled states, `error` for failures, `debug`/`verbose` only for targeted diagnostics.
 
-Use class context consistently:
+5. Enforce sensitive-data safety before finalizing.
+   - Never log passwords, hashes, secrets, API keys, JWTs, refresh tokens, cookies, raw request/response bodies, or raw PII.
+   - Prefer bounded metadata such as IDs, counts, booleans, operation names, and status codes.
 
-- Prefer a stable class-name context such as `AuthService` or `UsersController`.
-- Keep context consistent across methods in the same class.
+6. Validate final diff quality.
+   - Remove duplicate/noisy logs.
+   - Ensure each added log helps triage or audit behavior.
+   - Confirm no unsafe fields were introduced.
 
-Use levels intentionally:
+## Logger Usage Contract
 
-- `log` or `info`: successful operations and key state transitions
-- `warn`: handled but unexpected paths or degraded behavior
-- `error`: failures and thrown exceptions
-- `debug` or `verbose`: temporary or high-detail diagnostics only
-
-Expected `LoggerService` API shape:
+Use project conventions for injection and method signatures. Expected common shape:
 
 - `log(message, context?, meta?)` or `info(message, context?, meta?)`
 - `warn(message, context?, meta?)`
 - `error(message, trace?, context?, meta?)`
 - `debug(message, context?, meta?)` or `verbose(message, context?, meta?)`
-- Lifecycle cleanup when relevant: `onModuleDestroy()` should detach Winston process handlers (`exceptions.unhandle()`, `rejections.unhandle()`) and close the logger (`logger.close()`)
 
-When calling `error`, pass a trace or stack string when it improves diagnosis.
+When logging errors, include a trace/stack string only when it materially improves diagnosis.
 
-## Log Scope Rules
+## Output Expectations
 
-Log only meaningful events:
+When applying this skill during a task:
 
-- command/query success or failure
-- auth/authorization outcomes
-- external dependency failures or retries
-- branch outcomes that change user-visible behavior
+1. Report which files received logging changes.
+2. Summarize why each added log is high-signal.
+3. Explicitly confirm sensitive fields were excluded.
+4. Note any intentional omissions (for example, skipped noisy entry/exit logs).
 
-Avoid log noise:
+## Deterministic Guardrails
 
-- do not log every method entry/exit
-- do not log trivial passthrough helpers
-- do not duplicate framework-level logs
-
-Prefer one outcome log per operation, plus one error log on failure.
-
-## Sensitive Data Rules
-
-Never log:
-
-- passwords, password hashes, secrets, API keys
-- JWTs, refresh tokens, session tokens, cookies
-- full request or response bodies
-- raw PII unless explicitly required and redacted
-
-Prefer safe metadata:
-
-- IDs (`userId`, `accountId`, `resourceId`)
-- counts and booleans
-- status codes and operation names
-
-Keep `meta` small, stable, and diagnostic.
+- Do not introduce a new logging framework in this skill.
+- Do not refactor unrelated business logic while adding logs.
+- Keep edits minimal and localized to changed behavior paths.
+- If logger APIs differ from expected signatures, adapt to project conventions without forcing a rewrite.
 
 ## Edit Checklist
 
-- [ ] Inject `LoggerService` where new logging is needed
-- [ ] Use consistent class context
+- [ ] Confirm shared logger exists before edits
+- [ ] Inject/use logger according to project convention
 - [ ] Add only high-signal logs tied to changed behavior
-- [ ] Include actionable `error` logs with trace when useful
-- [ ] Exclude secrets, tokens, raw PII, and full payload bodies
+- [ ] Include actionable failure logs where relevant
+- [ ] Exclude secrets/tokens/raw sensitive payloads
+- [ ] Verify final diff for noise and duplication

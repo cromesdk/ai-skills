@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Winston Logging On Change"
+  short_description: "Add or repair high-signal Winston logs in changed NestJS code without exposing sensitive data"
+  default_prompt: "Use $winston-logging-on-change to add concise Winston logging to changed NestJS controllers/services/guards/interceptors/strategies/handlers in this repo, preserve existing LoggerService conventions, avoid noisy entry/exit logs, and explicitly prevent secrets/tokens/raw sensitive payloads from being logged."

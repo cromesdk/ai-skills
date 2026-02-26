@@ -1,93 +1,81 @@
-# Angular i18n Maintenance — Examples
+﻿# Angular i18n Maintenance Examples
 
-## Example 1: New button label
+## Example 1: New Button Label
 
-**Before (hardcoded):**
+Before:
 ```html
 <button type="submit">Save changes</button>
 ```
 
-**After:**
-
-Template:
+After:
 ```html
 <button type="submit">{{ 'settings.saveChanges' | translate }}</button>
 ```
 
-`public/i18n/en.json`:
+`en.json`:
 ```json
 {
-  "app.title": "My App",
   "settings.saveChanges": "Save changes"
 }
 ```
 
-`public/i18n/de.json`:
+`de.json`:
 ```json
 {
-  "app.title": "Meine App",
   "settings.saveChanges": "Änderungen speichern"
 }
 ```
 
----
+## Example 2: New Heading
 
-## Example 2: New heading
-
-**Before:**
+Before:
 ```html
 <h2>Dashboard</h2>
 ```
 
-**After:**
-
-Template:
+After:
 ```html
 <h2>{{ 'dashboard.title' | translate }}</h2>
 ```
 
-Add `"dashboard.title": "Dashboard"` to `en.json` and the same key with translated text to every other locale file.
-
----
+Add `dashboard.title` to every locale file.
 
 ## Example 3: Interpolation
 
-**Before:**
+Before:
 ```html
 <p>Welcome, {{ user.name }}</p>
 ```
 
-**After:**
-
-Template:
+After:
 ```html
 <p>{{ 'dashboard.welcome' | translate:{ name: user.name } }}</p>
 ```
 
 `en.json`:
 ```json
-"dashboard.welcome": "Welcome, {{ name }}"
+{
+  "dashboard.welcome": "Welcome, {{ name }}"
+}
 ```
 
 `de.json`:
 ```json
-"dashboard.welcome": "Willkommen, {{ name }}"
+{
+  "dashboard.welcome": "Willkommen, {{ name }}"
+}
 ```
 
----
+## Example 4: Attribute Binding
 
-## Example 4: Attribute (e.g. placeholder)
-
-**Before:**
+Before:
 ```html
 <input placeholder="Search..." />
 ```
 
-**After:**
-
-Template:
+After:
 ```html
 <input [placeholder]="'common.search' | translate" />
 ```
 
-Add `"common.search": "Search..."` (and equivalents) to all locale files.
+Add `common.search` to every locale file.

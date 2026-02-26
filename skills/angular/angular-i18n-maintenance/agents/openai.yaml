@@ -1,0 +1,26 @@
+﻿name: Angular i18n Maintenance
+version: 1
+schema: v1
+models:
+  - name: gpt-5
+    default: true
+
+system_instructions: |
+  Maintain runtime i18n in Angular projects that already use @ngx-translate/core.
+  For newly added user-facing static text, create or select a stable translation key,
+  replace hardcoded template/attribute text with TranslatePipe usage, and add the key
+  to every locale JSON file in the project locale set.
+  Preserve existing key style (flat or nested), validate JSON integrity, and do not
+  silently skip missing or malformed locale files.
+
+metadata:
+  description: Replace new hardcoded Angular UI text with ngx-translate keys and synchronize every locale JSON file.
+  triggers:
+    - angular i18n
+    - ngx-translate
+    - TranslatePipe
+    - locale json
+    - add translation key
+    - hardcoded text
+    - i18n maintenance
+    - runtime localization

@@ -1,62 +1,72 @@
----
+﻿---
 name: angular-i18n-maintenance
-description: When new static text is added in Angular apps that use embedded i18n (@ngx-translate), create a new translation ID, use TranslatePipe in the template, and add the key and default translation to all locale JSON files. Use when adding labels, buttons, messages, or any user-facing copy in projects with runtime i18n.
+description: Maintain runtime i18n in Angular apps using `@ngx-translate/core` by replacing new hardcoded UI text with translation keys, `TranslatePipe`, and synchronized entries in all locale JSON files. Use when adding labels, headings, buttons, messages, placeholders, or titles in projects that already use JSON locale files.
 ---
 
 # Angular i18n Maintenance
 
-When adding new static text in an Angular app that already has runtime i18n (e.g. `@ngx-translate/core` with JSON locale files), always: (1) define a new translation ID, (2) use the translation pipe in the template, and (3) add the key and wording to every locale file.
+Keep new user-facing text translatable in Angular projects that already run runtime i18n with `@ngx-translate/core`.
 
-## When to Apply
+## Purpose and Trigger Conditions
 
-- New labels, buttons, headings, messages, or any user-facing copy is added.
-- The project uses `TranslatePipe` and JSON locale files (e.g. `public/i18n/*.json` or `assets/i18n/*.json`).
-- Do **not** hardcode user-facing strings in templates or components.
+Apply this skill when all are true:
+- The project already uses runtime translation (`@ngx-translate/core`, `TranslatePipe`, locale JSON files).
+- New user-facing copy is being introduced or changed.
+- The copy appears in templates or translated attribute bindings.
 
-## Workflow
+Do not use this skill to bootstrap i18n from scratch.
 
-### 1) Choose or detect translation location
+## Mandatory Preflight
 
-- Locate the project’s locale JSON files (commonly `public/i18n/` or `assets/i18n/`).
-- Use existing key patterns (e.g. `feature.section.label`, `nav.home`, `common.save`).
-- If the app has a `reference`/default locale (e.g. `en.json`), use it as the source of truth for key structure.
+1. Confirm runtime i18n is present:
+   - Find `@ngx-translate/core` usage and `TranslatePipe`/`TranslateModule` usage.
+2. Discover locale file set:
+   - Identify the locale directory and all locale JSON files (for example `public/i18n/*.json` or `assets/i18n/*.json`).
+3. Detect key style from existing files:
+   - Flat keys (`"dashboard.title": "..."`) or nested keys (`"dashboard": { "title": "..." }`).
+4. Determine default/reference locale:
+   - Usually `en.json`; otherwise use the project’s configured default locale.
 
-### 2) Create a new translation ID
+If any preflight step fails, stop and report the blocker before editing content.
 
-- Use dot-notation: `scope.context.name` (e.g. `dashboard.welcome`, `auth.loginButton`, `errors.required`).
-- Prefer one key per phrase; avoid concatenating multiple keys for a single sentence.
-- Keep IDs stable: same key in every locale file.
+## Deterministic Workflow
 
-### 3) Use TranslatePipe in the template
+1. Define the translation key
+- Create one stable key for each new phrase using existing project naming patterns.
+- Prefer dot notation style consistent with the repository.
+- Do not split one phrase across multiple keys unless the project already does so for that exact case.
 
-- Prefer: `{{ 'key' | translate }}` for static text.
-- For attributes: `[title]="'key' | translate"` or `placeholder="key"` only if the project uses a custom attribute directive; otherwise use the pipe in the template where the value is bound.
-- Ensure the component imports `TranslateModule` (or the pipe is provided globally) so `translate` is available.
+2. Replace hardcoded template text
+- Static text: `{{ 'feature.section.label' | translate }}`
+- Interpolated text: `{{ 'feature.section.message' | translate:{ name: user.name } }}`
+- Attribute binding: `[placeholder]="'common.search' | translate"`, `[title]="'common.info' | translate"`
 
-### 4) Add the key to all locale files
+3. Add the key to locale files
+- Add the same key path to every locale JSON file discovered in preflight.
+- Use the default locale wording as the source value.
+- For locales without confirmed translation, temporarily copy default-locale text and record a follow-up outside JSON.
 
-- Add the **same key** to every locale JSON file (e.g. `en.json`, `de.json`).
-- Set the **default language** value to the new wording (e.g. English).
-- Set other locales to the correct translation; if unknown, use the default wording and optionally add a `// TODO: translate` comment in a separate doc, not inside JSON.
-- Keep JSON valid (no trailing commas, quoted keys).
+4. Preserve file conventions
+- Keep the project’s existing key structure (flat or nested).
+- Keep valid JSON syntax and formatting conventions.
 
-## Checklist
+## Verification Checklist
 
-- [ ] New translation ID follows dot-notation and existing project patterns.
-- [ ] Template uses `{{ 'key' | translate }}` (or equivalent) for the new text.
-- [ ] Key added to default/reference locale (e.g. `en.json`) with the new word/phrase.
-- [ ] Key added to every other locale file with translation or temporary default.
-- [ ] No user-facing string left hardcoded for that text.
+- [ ] New key follows existing naming/style conventions.
+- [ ] Template/attribute no longer contains newly introduced hardcoded user-facing text.
+- [ ] Key exists in every locale JSON file.
+- [ ] Interpolation parameter names are consistent across locales.
+- [ ] Locale files remain valid JSON.
+- [ ] Unrelated locale entries are unchanged.
 
-## Optional: Interpolation
+## Failure Handling
 
-If the string has placeholders (e.g. "Welcome, {{ name }}"):
-
-- In JSON: `"dashboard.welcome": "Welcome, {{ name }}"`
-- In template: `{{ 'dashboard.welcome' | translate:{ name: user.name } }}`
-- Use the same parameter names in every locale.
+- Missing locale files: stop and report missing files; request explicit file creation path.
+- Mixed key conventions in same locale set: follow dominant convention and note inconsistency.
+- Malformed locale JSON: stop and report exact file and parse issue; do not rewrite blindly.
+- Non-static/dynamic content request: do not force key extraction if text is runtime-generated data.
 
 ## References
 
-- Key naming and locale paths: [reference.md](reference.md)
-- Before/after examples: [examples.md](examples.md)
+- Practical patterns and detection rules: [reference.md](reference.md)
+- Before/after snippets: [examples.md](examples.md)

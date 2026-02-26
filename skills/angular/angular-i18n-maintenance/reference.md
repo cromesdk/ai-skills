@@ -1,33 +1,45 @@
-# Angular i18n Maintenance — Reference
+﻿# Angular i18n Maintenance Reference
 
-## Translation key naming
+## Translation Key Naming
 
-- **Format**: `scope.context.name` (dot-notation, lowercase).
-- **Scope**: Feature or area — e.g. `auth`, `dashboard`, `settings`, `nav`, `common`, `errors`.
-- **Context**: Screen or block — e.g. `login`, `profile`, `sidebar`.
-- **Name**: Purpose — e.g. `title`, `submitButton`, `requiredError`.
+- Follow existing project convention first.
+- Typical format: `scope.context.name` (for example `auth.login.submitButton`, `dashboard.title`, `common.cancel`).
+- Keep keys stable and descriptive; avoid one-off abbreviations.
 
-Examples: `auth.login.submitButton`, `nav.home`, `common.cancel`, `errors.required`.
+## Locale File Discovery Heuristics
 
-## Locale file locations
+1. Find `@ngx-translate/core` usage in the workspace.
+2. Locate JSON loader configuration and prefix/suffix paths.
+3. Confirm locale directory contents and language set.
+4. Identify default/reference locale (commonly `en.json`).
 
-| Setup              | Typical path              |
-|--------------------|---------------------------|
-| ngx-translate      | `public/i18n/*.json` or `assets/i18n/*.json` |
-| Angular build i18n | `src/locale/*.json` or project-specific |
+Common paths include:
+- `public/i18n/*.json`
+- `assets/i18n/*.json`
 
-Detect by searching for `TranslateHttpLoader`, `prefix`/`suffix` for JSON, or existing `*.json` under `i18n`/`locale`.
+## TranslatePipe Patterns
 
-## TranslatePipe usage
+- Static content:
+```html
+{{ 'feature.section.label' | translate }}
+```
 
-- **Static**: `{{ 'key' | translate }}`
-- **With params**: `{{ 'key' | translate:{ param: value } }}`
-- **In attributes**: `[title]="'key' | translate"` (ensure pipe is available in the component).
+- Interpolation:
+```html
+{{ 'dashboard.welcome' | translate:{ name: user.name } }}
+```
 
-Standalone components must import `TranslateModule` (or the app provides the pipe globally).
+- Attribute bindings:
+```html
+<input [placeholder]="'common.search' | translate" />
+<button [title]="'common.refresh' | translate"></button>
+```
 
-## Adding to locale files
+Ensure `TranslatePipe` is available in the component context (directly or via imported/provided module setup).
 
-1. Open each locale file (e.g. `en.json`, `de.json`).
-2. Add the key at the right level; use nested objects if the project uses them (e.g. `"dashboard": { "welcome": "..." }`) or flat keys (e.g. `"dashboard.welcome": "..."`) to match existing style.
-3. Preserve JSON syntax (no trailing commas, double-quoted keys and string values).
+## JSON Validity and Key Parity
+
+- Add each new key to all locale JSON files in the set.
+- Preserve existing structure style (flat or nested).
+- Keep valid JSON: double-quoted keys/values, no trailing commas.
+- If a translation is pending, use default-locale text temporarily and track follow-up outside JSON.

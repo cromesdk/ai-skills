@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS TypeDoc"
+  short_description: "Configure TypeDoc for NestJS API docs"
+  default_prompt: "Use $nestjs-typedoc-setup to add TypeDoc configuration and scripts for this NestJS backend."

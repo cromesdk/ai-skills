@@ -1,4 +1,4 @@
 interface:
   display_name: "NestJS Prisma Setup"
-  short_description: "Set up Prisma ORM in NestJS backends"
-  default_prompt: "Use $nestjs-prisma-setup to install Prisma and wire PrismaService and PrismaModule in this NestJS backend."
+  short_description: "Install, repair, and verify Prisma ORM wiring in NestJS backends"
+  default_prompt: "Use $nestjs-prisma-setup to install or repair Prisma in this NestJS backend, including sqlite adapter wiring, prisma.config.ts datasource setup, PrismaService/PrismaModule integration, migrations, and runtime verification gates."

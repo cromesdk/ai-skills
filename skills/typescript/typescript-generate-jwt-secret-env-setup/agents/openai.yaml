@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate JWT Secret Env"
+  short_description: "Generate or repair JWT_SECRET in .env when src code references it"
+  default_prompt: "Use $generate-jwt-secret-env to detect JWT_SECRET usage under src/, update only missing or placeholder .env JWT_SECRET values with a cryptographically secure secret, and verify the result without exposing the secret."

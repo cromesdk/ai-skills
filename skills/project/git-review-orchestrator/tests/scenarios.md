@@ -12,6 +12,7 @@ User asks: "Run the git review orchestrator on current changes."
 - Gate matrix includes a `Preflight` row with `pass` status.
 - Tests, formatter/linter, docs/version gates are `not_run`.
 - Output includes explicit fail-fast reason.
+- Output includes `## Failure Diagnostics` with failed gate, root cause, and unblock action.
 - Output states no automatic git commit occurred.
 
 ## Scenario 2: review_pass_tests_fail
@@ -28,6 +29,7 @@ User asks: "Run full quality gate review for this diff."
 - Tests gate `fail` with command evidence.
 - Formatter/linter and docs/version gates `not_run`.
 - Output includes remediation direction for failing tests.
+- Output includes `## Failure Diagnostics` with failing test command, exit code, error evidence, and unblock action.
 
 ## Scenario 3: review_tests_pass_lint_missing
 ### Input
@@ -56,7 +58,7 @@ User asks: "Prepare this feature diff for release readiness."
 ### Expected behavior
 - Gate matrix includes a `Preflight` row with `pass` status.
 - Relevant framework skills are selected and listed.
-- Changelog and README planning actions are produced.
+- `CHANGELOG.md` and `README.md` are updated on disk and reported with concrete edit summaries.
 - Version classification is `feature` with planned bump `minor + 1`.
 - Output includes explicit no-auto-commit statement.
 
@@ -70,7 +72,7 @@ User asks: "Run release-quality review for this bugfix diff."
 
 ### Expected behavior
 - Gate matrix includes a `Preflight` row with `pass` status.
-- Changelog/readme actions produced if applicable.
+- `CHANGELOG.md` and `README.md` are updated on disk and reported with concrete edit summaries.
 - Version classification is `bugfix` with planned bump `patch + 1`.
 - Major bump is explicitly not used.
 - No automatic commit performed.
@@ -84,7 +86,7 @@ User asks: "Run the full orchestrator and finalize everything."
 
 ### Expected behavior
 - Gate matrix includes a `Preflight` row with `pass` status.
-- Skill performs all allowed gates and planning actions.
+- Skill performs all allowed gates and executes Gate D file updates when scope is non-empty.
 - Skill explicitly refuses or omits automatic `git commit`.
 - Final output contains: `No automatic git commit was performed.`
 
@@ -99,6 +101,7 @@ User asks: "Review docs-only changes in this branch."
 - Gate matrix includes a `Preflight` row with `pass` status.
 - Routes to relevant doc skills (`readme-updater`, changelog skill) and excludes unrelated framework skills.
 - Executes review/tests/quality checks according to docs-only applicability.
+- Applies docs updates directly to `CHANGELOG.md` and `README.md` when Gate D runs.
 - Produces deterministic gate matrix with `skipped` reasons where commands are unavailable.
 
 ## Scenario 8: preflight_fails_not_git_repo
@@ -112,19 +115,21 @@ User asks: "Run the git review orchestrator for this folder."
 - Preflight row returns `fail` with command evidence (for example, git repo detection failure).
 - Gates A-D are all `not_run`.
 - Output includes one concrete unblock action (for example, switch directory or initialize repository).
+- Output includes `## Failure Diagnostics` for preflight with failed check evidence and root cause.
 - Output still states no automatic git commit occurred.
 
-## Scenario 9: preflight_fails_not_plan_mode
+## Scenario 9: preflight_fails_scope_commands
 ### Input
 User asks: "Run full git review right now."
 
 ### Repository/Context State
-- Execution mode is not Plan Mode.
+- Git commands required for scope detection fail unexpectedly (for example, `git status --short` returns an error).
 
 ### Expected behavior
-- Preflight row returns `fail` with reason that Plan Mode is required.
+- Preflight row returns `fail` with command evidence from the failed scope check.
 - Gates A-D are all `not_run`.
-- Output includes explicit instruction to rerun in Plan Mode.
+- Output includes an explicit unblock action to restore git command execution and rerun.
+- Output includes `## Failure Diagnostics` for preflight with failed command/check and root cause.
 - Output still states no automatic git commit occurred.
 
 ## Scenario 10: no_changes_scope
@@ -164,6 +169,6 @@ User asks: "Run full quality gate review on this code-only diff."
 
 ### Expected behavior
 - Gate D still routes through README evaluation workflow.
-- Output includes explicit README action, either concrete update plan or `not required` with rationale.
+- Output includes applied README edits with file evidence (not plan-only or `not required`).
 - Changelog/version actions remain present per Gate D rules.
 - Output states no automatic git commit occurred.

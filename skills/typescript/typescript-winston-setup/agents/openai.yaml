@@ -1,0 +1,4 @@
+interface:
+  display_name: "NestJS Winston Logging Setup"
+  short_description: "Install, repair, and verify Winston logging in NestJS backends"
+  default_prompt: "Use $typescript-winston-setup to install or repair Winston in a NestJS TypeScript backend with ConfigService-driven env validation, DI logger wiring, pretty development logs, JSON production/file logs, and OnModuleDestroy cleanup for exception and rejection handlers."

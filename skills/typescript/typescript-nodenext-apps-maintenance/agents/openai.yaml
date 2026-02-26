@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: "TypeScript NodeNext Apps Maintenance"
+  short_description: "Audit and fix NodeNext/Node16 TypeScript relative import extensions for runtime-valid resolution"
+  default_prompt: "Use $nodenext-apps to detect NodeNext/Node16 mode, audit and fix relative import specifiers to emitted extensions, and verify with audit plus build/test checks."

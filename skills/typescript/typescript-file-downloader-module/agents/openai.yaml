@@ -1,0 +1,4 @@
+interface:
+  display_name: "TS File Downloader"
+  short_description: "Add or repair in-repo TS/NestJS downloader module"
+  default_prompt: "Use $typescript-file-downloader-module to add, repair, or standardize an in-repo TypeScript downloader module with streamed writes, safe path/protocol validation, non-throwing standardized error mapping, and deterministic DownloadResult responses (with optional NestJS wiring)."

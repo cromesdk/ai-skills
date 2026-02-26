@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript JSDoc Develop"
+  short_description: "Deterministically create or repair JSDoc in .js/.ts/.tsx without behavior changes"
+  default_prompt: "Use $typescript-jsdoc-develop to add, fix, or standardize JSDoc for selected JavaScript/TypeScript symbols after signature or behavior-documentation drift."

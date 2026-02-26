@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Husky Setup"
+  short_description: "Install, repair, and verify Husky + lint-staged pre-commit hooks for TypeScript projects"
+  default_prompt: "Use $typescript-husky-setup to add or fix Husky and lint-staged in this TypeScript repository, keep checks staged-file-only, and verify the pre-commit workflow end to end."

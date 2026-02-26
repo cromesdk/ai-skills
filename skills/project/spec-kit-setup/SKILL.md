@@ -1,41 +1,36 @@
 ---
 name: spec-kit-setup
-description: Install, initialize, reconcile, and verify github/spec-kit in repositories using a deterministic non-destructive workflow. Use when users ask to install spec-kit, initialize specify, fix broken `.specify` or `.github/prompts`, upgrade specify-cli, enable spec-driven development, or verify `/constitution` `/specify` `/plan` `/tasks` readiness.
+description: Install, initialize, reconcile, and verify spec-kit in repositories using a deterministic non-destructive workflow. Use when users ask to install spec-kit, initialize specify, fix broken `.specify` or `.github/prompts`, upgrade `@spec-kit/cli`, enable spec-driven development, or verify `/constitution` `/specify` `/plan` `/tasks` readiness.
 ---
 
 # Spec Kit Setup
 
 ## Overview
-Set up or repair `github/spec-kit` with fail-fast preflight checks, safe reconcile defaults, and deterministic verification. Prefer minimal, non-destructive changes for repositories that already contain `.specify/`.
+Set up or repair spec-kit with fail-fast preflight checks, safe reconcile defaults, and deterministic verification. Prefer minimal, non-destructive changes for repositories that already contain `.specify/`.
 
 ## Hard Rules
 - Run preflight checks before any install, upgrade, or init action.
 - Default to safe reconcile for existing installations; do not force re-init unless the user explicitly requests it.
-- Never invent flags or commands; use only command forms documented in `github/spec-kit`.
+- Never invent flags or commands; use only command forms documented for `@spec-kit/cli`.
 - Stop on first hard blocker and return a concrete unblock command.
 - Prefer `--here` initialization so setup stays in the current repository unless user requests another path.
 - Use explicit assistant selection with `--ai <assistant>`; do not rely on implicit defaults.
-- Prefer GitHub Releases artifacts as the primary install/upgrade source; download and extract the correct package for the current OS/architecture/engine.
+- Use npm as the install/upgrade source with `@spec-kit/cli`.
 
 ## Preflight (required)
 Run and record:
 1. `git rev-parse --is-inside-work-tree`
-2. `gh --version`
-3. `uv --version`
+2. `node --version`
+3. `npm --version`
 4. `python --version`
 
 If a check fails:
 - Mark preflight as `fail`.
 - Do not run setup actions.
 - Return one unblock path:
-  - Missing `gh`: install GitHub CLI and authenticate.
-  - Missing `uv`: install uv from astral.sh.
+  - Missing `node`/`npm`: install Node.js LTS (includes npm) and ensure PATH is configured.
   - Missing `python`: install Python 3.x and ensure PATH is configured.
   - Not in git repo: switch directory to a repo or run `git init`.
-
-If `gh` is installed, also check auth state:
-- `gh auth status`
-- If not authenticated, stop and return unblock command: `gh auth login`
 
 ## Workflow
 1. Detect repository state.
@@ -67,15 +62,13 @@ Classify:
 - `existing_partial_or_broken`: `.specify` exists but key artifacts are missing or invalid.
 
 ## Fresh Setup Path
-Use release-based install and official init commands:
-1. Install CLI from releases:
-   - Source: `https://github.com/github/spec-kit/releases`
-   - Resolve latest stable release tag.
-   - Select artifact matching current OS/architecture and required engine/runtime.
-   - Download release asset.
-   - Extract archive.
-   - Place `specify` binary/script in a deterministic PATH location for current user/session.
-   - Verify executable permissions where relevant.
+Use npm-based install and official init commands:
+1. Install CLI from npm:
+   - Source: `https://www.npmjs.com/package/@spec-kit/cli`
+   - Install deterministically for the environment:
+     - Global: `npm install -g @spec-kit/cli`
+     - Or one-off execution: `npx @spec-kit/cli@latest --version`
+   - Verify CLI command availability (`specify`) before init.
 2. Initialize in current repo:
    - `specify init --ai <assistant> --here [--script ps]`
    - Use a supported assistant value from current upstream guidance.
@@ -87,10 +80,10 @@ Use release-based install and official init commands:
 
 ## Existing Setup Safe Reconcile Path (default)
 1. Upgrade CLI first:
-   - Source: `https://github.com/github/spec-kit/releases`
-   - Resolve installed `specify --version` and latest stable release tag.
-   - If outdated, download and extract the correct release artifact for current OS/architecture/engine, then replace binary/script safely.
-   - If current, skip binary replacement.
+   - Source: `https://www.npmjs.com/package/@spec-kit/cli`
+   - Resolve installed version via `specify --version` (or `npx @spec-kit/cli@latest --version` if command missing).
+   - Upgrade deterministically when needed: `npm install -g @spec-kit/cli@latest`.
+   - If already current, skip reinstall.
 2. Inspect existing assets:
    - `.specify/`
    - `.github/prompts/`
@@ -127,9 +120,9 @@ Return:
 - explicit command from `/constitution`, `/specify`, `/plan`, `/tasks`
 
 ## Reference Commands (Upstream-Backed)
-- Release index: `gh release list --repo github/spec-kit`
-- Release assets: `gh release view <tag> --repo github/spec-kit --json assets`
-- Download asset: `gh release download <tag> --repo github/spec-kit --pattern "<artifact-pattern>" --dir <target-dir>`
+- npm package info: `npm view @spec-kit/cli version`
+- Install/upgrade global: `npm install -g @spec-kit/cli@latest`
+- One-off CLI execution: `npx @spec-kit/cli@latest --version`
 - Initialize current repo: `specify init --ai <assistant> --here [--script ps]`
 - Diagnostics: `specify check`
 - Version check: `specify --version`

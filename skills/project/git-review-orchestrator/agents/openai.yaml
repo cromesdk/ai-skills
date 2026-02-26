@@ -1,4 +1,4 @@
 interface:
   display_name: "Git Review Orchestrator"
-  short_description: "Plan-Mode fail-fast git quality gate orchestration"
-  default_prompt: "Run a deterministic Plan-Mode-only git review pipeline: preflight checks first, then review, tests, formatter/linter, and docs/version planning with fail-fast gate behavior, relevant-skill routing by changed files, mandatory README evaluation in Gate D, explicit gate matrix output, and no automatic git commit."
+  short_description: "Fail-fast git quality gate orchestration"
+  default_prompt: "Run a deterministic git review pipeline: preflight checks first, then review, tests, formatter/linter, and docs/version execution with fail-fast gate behavior, relevant-skill routing by changed files, mandatory README and CHANGELOG file updates in Gate D for non-empty scope, explicit gate matrix output, and no automatic git commit."

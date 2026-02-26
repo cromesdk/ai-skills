@@ -7,13 +7,12 @@ User asks: "Introduce spec-kit into this repo and get me started."
 ### Repository/Context State
 - Valid git repository.
 - `.specify` and `.github/prompts` do not exist.
-- `gh`, `uv`, and `python` are installed.
-- `gh auth status` passes.
+- `node`, `npm`, and `python` are installed.
 
 ### Expected behavior
 - Preflight passes.
 - Skill selects fresh setup path.
-- Downloads and extracts the correct release artifact from `https://github.com/github/spec-kit/releases` for current OS/architecture/engine, then runs init.
+- Installs CLI from `https://www.npmjs.com/package/@spec-kit/cli` (for example via `npm install -g @spec-kit/cli@latest`) and then runs init.
 - Uses explicit `--ai <assistant>` and `--here` during init.
 - Verifies `specify --version`, `specify check`, `.specify`, and `.github/prompts`.
 - Returns `/constitution` as next-step command.
@@ -30,24 +29,23 @@ User asks: "Update our existing spec-kit setup to latest and verify it."
 ### Expected behavior
 - Preflight passes.
 - Skill selects safe reconcile path.
-- Checks installed version against latest release and upgrades by downloading/extracting the correct release artifact when needed.
+- Checks installed version and upgrades via npm when needed (`npm install -g @spec-kit/cli@latest`).
 - Does not force destructive re-init.
 - Reports that no repair is needed (or only minimal non-destructive actions).
 - Verifies readiness with `specify check`.
 
-## Scenario 10: release_artifact_selection_must_match_runtime
+## Scenario 10: npm_cli_install_and_version_verification
 ### Input
-User asks: "Install spec-kit correctly for this machine from releases."
+User asks: "Install spec-kit correctly for this machine from npm."
 
 ### Repository/Context State
 - Valid git repository.
 - Prerequisites available.
-- Multiple release assets exist for different platforms/engines.
+- npm registry is reachable.
 
 ### Expected behavior
-- Skill inspects release assets for the selected tag.
-- Skill chooses only the artifact that matches the current OS/architecture/engine.
-- Skill downloads and extracts that artifact only.
+- Skill installs `@spec-kit/cli` from npm.
+- Skill verifies `specify` command availability after installation.
 - Skill verifies `specify --version` after installation.
 
 ## Scenario 3: partial_install_repair
@@ -67,13 +65,13 @@ User asks: "Fix our broken spec-kit setup."
 - Verifies assets after repair.
 - Returns readiness for `/specify` and downstream workflow commands.
 
-## Scenario 4: missing_gh_or_uv_preflight_fail
+## Scenario 4: missing_node_or_npm_preflight_fail
 ### Input
 User asks: "Set up spec-kit here."
 
 ### Repository/Context State
 - Valid git repository.
-- `gh` or `uv` is missing from PATH.
+- `node` or `npm` is missing from PATH.
 
 ### Expected behavior
 - Preflight fails with explicit missing-tool evidence.
@@ -106,19 +104,19 @@ User asks: "Finish setup and tell me exactly what command flow to run next."
 - Recommends ordered progression: `/constitution`, `/specify`, `/plan`, `/tasks`.
 - Includes verification rationale for why each command is now safe to use.
 
-## Scenario 7: gh_installed_but_not_authenticated
+## Scenario 7: npm_registry_unreachable_preflight_or_install_fail
 ### Input
 User asks: "Set up spec-kit in this repo."
 
 ### Repository/Context State
 - Valid git repository.
-- `gh`, `uv`, and `python` are installed.
-- `gh auth status` fails.
+- `node`, `npm`, and `python` are installed.
+- npm registry is unreachable or blocked.
 
 ### Expected behavior
-- Preflight fails on GitHub CLI authentication.
+- Preflight passes, then install/upgrade fails on npm reachability.
 - No setup/install/init actions run.
-- Output includes unblock action: `gh auth login`.
+- Output includes concrete unblock path (restore registry/network access or configure npm registry/proxy).
 
 ## Scenario 8: unsupported_or_missing_assistant_value
 ### Input

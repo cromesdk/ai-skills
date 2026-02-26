@@ -1,10 +1,10 @@
-# Test Scenarios for codex-skill-enhancer
+# Test Scenarios for skill-enhancer
 
 ## Scenario: Improve trigger quality and portability
 
 **Difficulty:** Easy
 
-**Query:** Improve this skill so it triggers reliably for refactor and review requests across Codex, Cursor, and Copilot workflows.
+**Query:** Improve this skill so it triggers reliably for refactor and review requests across Codex, Claude, Gemini, and Cursor workflows.
 
 **Expected behaviors:**
 
@@ -60,7 +60,7 @@
 
 **Difficulty:** Easy
 
-**Query:** $codex-skill-enhancer update Skill codex-skill-enhancer
+**Query:** $skill-enhancer update skill skill-enhancer
 
 **Expected behaviors:**
 
@@ -76,7 +76,7 @@
    - **Minimum:** Updates `SKILL.md`
    - **Quality criteria:**
      - Keeps edits scoped to identified issues only
-     - Avoids unnecessary folder or file renames
+     - Avoids unnecessary folder or file renames unless explicitly requested
      - Maintains existing intent while improving clarity and actionability
    - **Weight:** 5
 
@@ -123,7 +123,7 @@
 3. Updates tests to cover portability regressions
    - **Minimum:** Adds or edits one relevant scenario
    - **Quality criteria:**
-     - Includes expected behavior for cross-assistant consistency
+     - Includes expected behavior for Codex, Claude, Gemini, and Cursor consistency
      - Verifies `agents/openai.yaml` wording remains assistant-agnostic
    - **Weight:** 3
 
@@ -137,8 +137,33 @@
 5. Grounds portability claims in official docs
    - **Minimum:** Cites at least one official source per assistant ecosystem discussed
    - **Quality criteria:**
-     - Uses official docs for Codex/OpenAI, Cursor, and GitHub Copilot when claims are made
+     - Uses official docs for OpenAI Codex, Anthropic Claude, Google Gemini, and Cursor when claims are made
      - Avoids forum or blog links as primary evidence
+   - **Weight:** 4
+
+---
+
+## Scenario: Legacy trigger compatibility guidance
+
+**Difficulty:** Medium
+
+**Query:** $codex-skill-enhancer update this skill for better cross-assistant support.
+
+**Expected behaviors:**
+
+1. Handles legacy trigger safely
+   - **Minimum:** Recognizes old trigger and proceeds
+   - **Quality criteria:**
+     - Treats `$skill-enhancer` as the primary trigger in updates
+     - Preserves a short migration note for legacy prompts
+     - Avoids reverting primary naming back to `codex-skill-enhancer`
+   - **Weight:** 4
+
+2. Prevents naming regression
+   - **Minimum:** Keeps new skill identity intact
+   - **Quality criteria:**
+     - Updates references to current naming except intentional compatibility notes
+     - Verifies metadata and tests still center on `skill-enhancer`
    - **Weight:** 4
 
 ---

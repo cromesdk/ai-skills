@@ -1,11 +1,15 @@
 ---
-name: codex-skill-enhancer
-description: Upgrade existing agent skills end-to-end with deterministic edits, stronger trigger wording, portability hardening, and test coverage improvements. Use when users ask to update, fix, review, refactor, standardize, optimize, or harden any `SKILL.md` workflow and its companion files (`agents/openai.yaml`, `tests/scenarios.md`).
+name: skill-enhancer
+description: Upgrade existing agent skills end-to-end with deterministic edits, stronger trigger wording, cross-assistant portability hardening, and test coverage improvements. Use when users ask to update, fix, review, refactor, standardize, optimize, or harden any `SKILL.md` workflow and its companion files (`agents/openai.yaml`, `tests/scenarios.md`) for Codex, Claude, Gemini, and Cursor.
 ---
 
-# Codex Skill Enhancer
+# Skill Enhancer
 
 Strengthen existing skills through proactive technical review and targeted remediation, then deliver enterprise-grade, assistant-agnostic improvements by default.
+
+Compatibility note:
+- Treat `$skill-enhancer` as the primary trigger.
+- Legacy prompts may still use `$codex-skill-enhancer`; handle them as migration-compatible aliases in documentation and tests.
 
 ## Mandatory reference policy
 
@@ -45,7 +49,7 @@ Do not ask "what to improve" as a default step. Instead, infer and address the h
 Assess and prioritize:
 1. Trigger precision and coverage in `description`.
 2. Instruction actionability and deterministic workflow order.
-3. Portability across Codex, Cursor, and GitHub Copilot-style assistants.
+3. Portability across Codex, Claude, Gemini, and Cursor.
 4. Completeness of `agents/openai.yaml` alignment with current skill purpose.
 5. Test scenario rigor, including hard and edge-case behavior.
 6. Enterprise quality bar: clarity, consistency, verification gates, and low ambiguity.
@@ -115,7 +119,7 @@ Update TODO status after each completed change.
 Confirm:
 - Highest-impact enterprise-quality issues are explicitly addressed.
 - Workflow is executable without hidden assumptions.
-- Language is generic enough for Codex, Cursor, and Copilot-style agents.
+- Language is generic enough for Codex, Claude, Gemini, and Cursor.
 - Scenario tests reflect real failure modes and expected behavior.
 - `agents/openai.yaml` exists and is aligned with `SKILL.md` (display name, short description, and default prompt reflect current purpose).
 - Final report includes official references backing the applied changes.

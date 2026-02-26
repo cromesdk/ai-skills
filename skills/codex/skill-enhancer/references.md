@@ -1,4 +1,4 @@
-# codex-skill-enhancer reference policy
+# skill-enhancer reference policy
 
 Use this file to guide reference selection when enhancing skills.
 
@@ -25,7 +25,8 @@ Use this file to guide reference selection when enhancing skills.
 ## Suggested official source starting points
 
 - OpenAI developer or product documentation: https://platform.openai.com/docs
-- GitHub Copilot documentation: https://docs.github.com/en/copilot
+- Anthropic Claude documentation: https://docs.anthropic.com
+- Google Gemini documentation: https://ai.google.dev/gemini-api/docs
 - Cursor documentation: https://docs.cursor.com
 - YAML language specification: https://yaml.org/spec/
 - CommonMark specification: https://spec.commonmark.org

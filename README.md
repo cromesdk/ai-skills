@@ -4,14 +4,14 @@
   <img src="assets/logo.svg" alt="Project logo" />
 </p>
 
-Curated, reusable agent skills for deterministic engineering workflows across Angular, Figma, NestJS, TypeScript, Codex, and project documentation operations.
+Deterministic, reusable agent skills for engineering workflows across Angular, Figma, NestJS, TypeScript, Codex, and project operations.
 
 ## Overview and Scope
 
 This repository is a skill catalog for coding assistants. Each skill package is organized under `skills/<domain>/<skill-name>/` and is expected to include:
 
 - `SKILL.md` (workflow and rules)
-- `agents/openai.yaml` (interface metadata)
+- `agents/openai.yaml` (assistant interface metadata)
 - `tests/scenarios.md` (evaluation scenarios)
 
 Repository scope includes skill authoring, maintenance, and scenario coverage for assistant behavior and delivery workflows.
@@ -23,12 +23,12 @@ Domain-first layout under `skills/`:
 | Domain | Skill Count (`SKILL.md`) | Path | Notes |
 |---|---:|---|---|
 | `angular` | 15 | `skills/angular` | Angular application/tooling workflows |
-| `figma` | 6 | `skills/figma` | Figma-to-code and design workflows |
-| `nestjs` | 7 | `skills/nestjs` | NestJS backend setup and tooling workflows |
-| `typescript` | 2 | `skills/typescript` | TypeScript tooling workflows |
 | `codex` | 1 | `skills/codex` | Assistant behavior hardening workflows |
-| `project` | 6 | `skills/project` | Repository/project process workflows |
+| `figma` | 6 | `skills/figma` | Figma-to-code and design workflows |
+| `nestjs` | 14 | `skills/nestjs` | NestJS backend setup, maintenance, and tooling workflows |
+| `project` | 6 | `skills/project` | Repository/process and documentation workflows |
 | `python` | 0 | `skills/python` | Domain folder present; no `SKILL.md` currently |
+| `typescript` | 2 | `skills/typescript` | TypeScript tooling workflows |
 
 Companion-file integrity status: all discovered skills currently include both `agents/openai.yaml` and `tests/scenarios.md`.
 
@@ -36,18 +36,18 @@ Companion-file integrity status: all discovered skills currently include both `a
 
 - Git
 - A coding-assistant runtime capable of executing skill instructions from `SKILL.md`
-- Node.js/npm only when an individual skill requires Node-based tooling
+- Node.js and npm only when an individual skill requires Node-based tooling
 
 ## Quick Start
 
 1. Open this repository as your active workspace.
-2. Invoke a skill by name in your prompt.
+2. Invoke a skill by name in your assistant prompt.
 3. Review changed files and scenario coverage for the touched skill.
 
 Example invocations:
 
 ```text
-$readme-updater recreate readme
+$readme-updater update root readme
 $changelog-keepachangelog-update update changelog from current repository changes
 ```
 
@@ -78,8 +78,7 @@ Basic runbook checks:
 
 Common failure mode:
 
-- Skill discovery mismatch
-  - Verify `name` and `description` frontmatter in `SKILL.md` are accurate and trigger-friendly.
+- Skill discovery mismatch: verify `name` and `description` frontmatter in `SKILL.md` are accurate and trigger-friendly.
 
 ## Deployment and Release
 
@@ -91,7 +90,7 @@ Deployment automation/pipeline guidance at repository root: `TBD (owner needed)`
 
 - License file is present and project is MIT-licensed ([LICENSE](./LICENSE)).
 - No repository-level secrets-management workflow is documented.
-- Do not introduce unverifiable compliance claims in skill docs.
+- No repository-level compliance framework documentation is declared.
 - Security/compliance ownership model: `TBD (owner needed)`.
 
 ## Contributing and Code Standards
@@ -101,6 +100,12 @@ Deployment automation/pipeline guidance at repository root: `TBD (owner needed)`
 3. Update `tests/scenarios.md` when behavior changes.
 4. Keep `agents/openai.yaml` synchronized with skill workflow changes.
 5. Validate companion-file completeness before merge.
+
+## Ownership, Support, and Escalation
+
+- Primary owner: `TBD (owner needed)`
+- Support channel: `TBD (owner needed)`
+- Escalation path: `TBD (owner needed)`
 
 ## License and Legal Notices
 

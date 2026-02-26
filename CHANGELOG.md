@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-02-26
+
+### Removed
+
+- Removed project-level `spec-kit` skills from the repository:
+  - `skills/project/spec-kit-setup/SKILL.md`
+  - `skills/project/spec-kit-setup/agents/openai.yaml`
+  - `skills/project/spec-kit-setup/tests/scenarios.md`
+  - `skills/project/spec-kit-workflow/SKILL.md`
+  - `skills/project/spec-kit-workflow/agents/openai.yaml`
+  - `skills/project/spec-kit-workflow/tests/scenarios.md`
+
+### Changed
+
+- Updated root `README.md` domain inventory counts to reflect removal of `spec-kit` project skills.
+
 ## [1.0.4] - 2026-02-26
 
 ### Added

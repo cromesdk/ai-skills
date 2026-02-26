@@ -101,12 +101,6 @@ Deployment automation/pipeline guidance at repository root: `TBD (owner needed)`
 4. Keep `agents/openai.yaml` synchronized with skill workflow changes.
 5. Validate companion-file completeness before merge.
 
-## Ownership, Support, and Escalation
-
-- Primary owner: `TBD (owner needed)`
-- Support channel: `TBD (owner needed)`
-- Escalation path: `TBD (owner needed)`
-
 ## License and Legal Notices
 
 This project is licensed under MIT. See [LICENSE](./LICENSE).

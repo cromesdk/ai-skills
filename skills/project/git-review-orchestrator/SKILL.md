@@ -35,7 +35,7 @@ If any preflight check fails:
 3. Run review gate using relevant skills/rules/agents.
 4. If review passes, run all available tests.
 5. If tests pass, run formatter/linter when available.
-6. If all previous gates pass, run changelog/readme update workflow and version bump planning.
+6. If all previous gates are pass/allowed-skipped and scope is not `no_changes`, run both `changelog-keepachangelog-update` and `readme-updater` and produce concrete update actions for both.
 7. Return a deterministic report with findings, gate matrix, and planned release-doc/version actions.
 
 ## 0) Scope and Stack Detection (required)
@@ -56,6 +56,9 @@ If any preflight check fails:
 Select all relevant skills/rules/agents from installed inventory:
 - Always include review mindset and repository rules.
 - Include framework-specific skills when matching files are detected.
+- For any non-`no_changes` scope, Gate D must include both:
+  - `changelog-keepachangelog-update`
+  - `readme-updater`
 - Include document skills for docs-only or docs-touching changes:
   - `changelog-keepachangelog-update`
   - `readme-updater`
@@ -108,9 +111,9 @@ Quality gate fail criteria:
 
 ## 5) Gate D: Docs and Version Planning (conditional)
 Only when gates A-C are pass/allowed-skipped:
-- Route through `changelog-keepachangelog-update` skill to prepare verified changelog updates.
-- Route through `readme-updater` skill to evaluate README drift and prepare README update actions for every eligible run.
-- If no README updates are required, return `not required` with rationale.
+- If scope is non-empty (not `no_changes`), route through both `changelog-keepachangelog-update` and `readme-updater`.
+- For non-empty scope, both changelog and README update actions are mandatory and must be concrete.
+- For non-empty scope, do not return `not required` for changelog or README actions.
 - Determine release type:
   - Feature -> bump `minor + 1`
   - Bug fix -> bump `patch + 1`
@@ -133,8 +136,8 @@ Return sections in this order:
 - Explicit list of selected skills/rules/agents and why each was included
 
 4. `## Docs and Version Actions`
-- Planned changelog updates
-- Planned README updates (or `not required` with rationale)
+- Planned changelog updates (mandatory when scope is non-empty and Gate D runs)
+- Planned README updates (mandatory when scope is non-empty and Gate D runs)
 - Version decision: `minor+1` for feature or `patch+1` for bugfix, with rationale
 - Explicit statement: `No automatic git commit was performed.`
 
@@ -146,3 +149,5 @@ Before returning:
 - Confirm fail-fast behavior was applied.
 - Confirm output matches required section order.
 - Confirm `Preflight` row exists in the gate matrix.
+- Confirm that when scope is non-empty and Gate D ran, both README and CHANGELOG actions are present.
+- Confirm no `not required` is emitted for README/CHANGELOG in that condition.

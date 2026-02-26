@@ -35,3 +35,11 @@
 - When the assistant runs maintenance verification
 - Then it uses the repository package manager command format
 - And it preserves the required script order and retry semantics
+
+## Edge: Optional jsdoc pre-step unavailable
+
+- Given source/API files changed and `docs` exists in `package.json`
+- And `typescript-jsdoc-develop` is not installed in available skills
+- When the assistant executes this skill
+- Then it does not fail the run on that missing optional pre-step
+- And it reports `jsdoc pre-step skipped (skill unavailable)` before continuing ordered scripts

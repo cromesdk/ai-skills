@@ -32,7 +32,8 @@ Run only scripts that exist in `package.json`, in this strict order:
 1. Read `package.json` and load the `scripts` object.
 2. Build the runnable list by filtering the ordered script names to only those present in `scripts`.
 3. If no scripts from the ordered list are present, stop and report that nothing matched the maintenance pipeline.
-4. If source/API files were changed, run the `typescript-jsdoc-develop` skill before `docs` so generated documentation matches current exports.
+4. If source/API files were changed and the `typescript-jsdoc-develop` skill is installed, run it before `docs` so generated documentation matches current exports.
+   - If `typescript-jsdoc-develop` is not installed, continue the maintenance pipeline and report `jsdoc pre-step skipped (skill unavailable)` in the final output.
 5. Execute each runnable script from repository root using the repo package manager:
    - `npm run <script>`
    - `pnpm run <script>`

@@ -15,6 +15,7 @@ Set up or repair `github/spec-kit` with fail-fast preflight checks, safe reconci
 - Stop on first hard blocker and return a concrete unblock command.
 - Prefer `--here` initialization so setup stays in the current repository unless user requests another path.
 - Use explicit assistant selection with `--ai <assistant>`; do not rely on implicit defaults.
+- Prefer GitHub Releases artifacts as the primary install/upgrade source; download and extract the correct package for the current OS/architecture/engine.
 
 ## Preflight (required)
 Run and record:
@@ -66,9 +67,15 @@ Classify:
 - `existing_partial_or_broken`: `.specify` exists but key artifacts are missing or invalid.
 
 ## Fresh Setup Path
-Use official install and init commands:
-1. Install CLI:
-   - `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git`
+Use release-based install and official init commands:
+1. Install CLI from releases:
+   - Source: `https://github.com/github/spec-kit/releases`
+   - Resolve latest stable release tag.
+   - Select artifact matching current OS/architecture and required engine/runtime.
+   - Download release asset.
+   - Extract archive.
+   - Place `specify` binary/script in a deterministic PATH location for current user/session.
+   - Verify executable permissions where relevant.
 2. Initialize in current repo:
    - `specify init --ai <assistant> --here [--script ps]`
    - Use a supported assistant value from current upstream guidance.
@@ -80,7 +87,10 @@ Use official install and init commands:
 
 ## Existing Setup Safe Reconcile Path (default)
 1. Upgrade CLI first:
-   - `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git --upgrade`
+   - Source: `https://github.com/github/spec-kit/releases`
+   - Resolve installed `specify --version` and latest stable release tag.
+   - If outdated, download and extract the correct release artifact for current OS/architecture/engine, then replace binary/script safely.
+   - If current, skip binary replacement.
 2. Inspect existing assets:
    - `.specify/`
    - `.github/prompts/`
@@ -117,8 +127,9 @@ Return:
 - explicit command from `/constitution`, `/specify`, `/plan`, `/tasks`
 
 ## Reference Commands (Upstream-Backed)
-- Install: `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git`
-- Upgrade: `uv tool install specify-cli --from git+https://github.com/github/spec-kit.git --upgrade`
+- Release index: `gh release list --repo github/spec-kit`
+- Release assets: `gh release view <tag> --repo github/spec-kit --json assets`
+- Download asset: `gh release download <tag> --repo github/spec-kit --pattern "<artifact-pattern>" --dir <target-dir>`
 - Initialize current repo: `specify init --ai <assistant> --here [--script ps]`
 - Diagnostics: `specify check`
 - Version check: `specify --version`

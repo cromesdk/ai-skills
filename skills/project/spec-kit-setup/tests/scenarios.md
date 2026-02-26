@@ -13,7 +13,7 @@ User asks: "Introduce spec-kit into this repo and get me started."
 ### Expected behavior
 - Preflight passes.
 - Skill selects fresh setup path.
-- Runs official install and init commands.
+- Downloads and extracts the correct release artifact from `https://github.com/github/spec-kit/releases` for current OS/architecture/engine, then runs init.
 - Uses explicit `--ai <assistant>` and `--here` during init.
 - Verifies `specify --version`, `specify check`, `.specify`, and `.github/prompts`.
 - Returns `/constitution` as next-step command.
@@ -30,10 +30,25 @@ User asks: "Update our existing spec-kit setup to latest and verify it."
 ### Expected behavior
 - Preflight passes.
 - Skill selects safe reconcile path.
-- Runs official upgrade command first.
+- Checks installed version against latest release and upgrades by downloading/extracting the correct release artifact when needed.
 - Does not force destructive re-init.
 - Reports that no repair is needed (or only minimal non-destructive actions).
 - Verifies readiness with `specify check`.
+
+## Scenario 10: release_artifact_selection_must_match_runtime
+### Input
+User asks: "Install spec-kit correctly for this machine from releases."
+
+### Repository/Context State
+- Valid git repository.
+- Prerequisites available.
+- Multiple release assets exist for different platforms/engines.
+
+### Expected behavior
+- Skill inspects release assets for the selected tag.
+- Skill chooses only the artifact that matches the current OS/architecture/engine.
+- Skill downloads and extracts that artifact only.
+- Skill verifies `specify --version` after installation.
 
 ## Scenario 3: partial_install_repair
 ### Input

@@ -1,29 +1,35 @@
 ---
 name: nestjs-vitest-coverage
-description: Upgrade and maintain Vitest coverage for NestJS backends, including provider package alignment, coverage configuration, scripts, thresholds, and test updates to meet enforced coverage goals. Use when a user asks to update Vitest, fix or add coverage, configure coverage providers/reporters/thresholds, or raise test coverage in a NestJS project.
+description: Upgrade, repair, and enforce Vitest coverage in NestJS backends with deterministic provider alignment, coverage config hardening, script normalization, threshold enforcement, and test-gap remediation. Use when users ask to fix failing coverage, migrate or change coverage provider (v8/istanbul), configure coverage reporters/thresholds, raise CI coverage, or stop coverage drift after framework/test upgrades.
 ---
 
 # NestJS Vitest Coverage
 
-Use this workflow to keep NestJS Vitest coverage current and reliable.
+Use this workflow to keep NestJS coverage reliable, enforceable in CI, and aligned with current Vitest behavior.
 
-## 1. Audit current state
+## 1. Preflight and baseline audit
 
-1. Verify current versions and coverage package alignment:
+1. Detect package manager from lockfiles and use matching commands (`npm`, `pnpm`, or `yarn`) for all install and script operations.
+2. Verify runtime and toolchain:
+- `node -v`
+- package manager version
+3. Verify current versions and coverage package alignment:
 
 ```bash
 npm ls vitest @vitest/coverage-v8 @vitest/coverage-istanbul
 ```
 
-2. Confirm where test config lives:
+4. Confirm where test config lives:
 - `vitest.config.ts`, or
 - `vite.config.ts` with a `test` block.
 
-3. Check whether `package.json` has `test:cov` and whether coverage output is cleaned.
+5. Check whether `package.json` has `test:cov` and whether coverage output is cleaned.
+6. Run baseline coverage once and capture current failures before editing:
+- `npm run test:cov` (or package-manager equivalent).
 
 ## 2. Upgrade packages
 
-Prefer `v8` coverage unless the project explicitly needs Istanbul.
+Prefer `v8` coverage unless the project explicitly requires Istanbul compatibility.
 
 `v8` provider:
 
@@ -37,11 +43,14 @@ npm install -D vitest@latest @vitest/coverage-v8@latest
 npm install -D vitest@latest @vitest/coverage-istanbul@latest
 ```
 
-Keep Vitest and the selected coverage package on the same major version.
+Rules:
+- Keep `vitest` and selected coverage package on the same major version.
+- Install exactly one provider package unless the project intentionally keeps both.
+- If both providers are installed unintentionally, remove the unused one.
 
 ## 3. Configure coverage
 
-Add or update the `coverage` block:
+Add or update the `coverage` block in the active Vitest config:
 
 ```typescript
 coverage: {
@@ -59,10 +68,10 @@ coverage: {
     'test/**',
   ],
   thresholds: {
-    lines: 80,
-    functions: 80,
+    lines: 85,
+    functions: 85,
     branches: 80,
-    statements: 80,
+    statements: 85,
   },
 },
 ```
@@ -73,6 +82,7 @@ Guidelines:
 - Add `lcov` for CI tools such as Sonar and Codecov.
 - Use `include` to measure real source files instead of only executed files.
 - Exclude only entrypoints, modules, test files, generated code, and tooling.
+- Keep or increase existing thresholds; do not reduce thresholds unless user explicitly requests it.
 
 ## 4. Ensure scripts are correct
 
@@ -83,7 +93,8 @@ Update `package.json` scripts:
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:cov": "vitest run --coverage"
+    "test:cov": "vitest run --coverage",
+    "test:cov:watch": "vitest --coverage --watch"
   }
 }
 ```
@@ -103,6 +114,7 @@ npm run test:cov
 - `coverage/index.html` for branch-level gaps.
 
 3. Confirm thresholds are enforced and fail below target.
+4. If CI runs coverage, confirm command parity between local and CI scripts/workflows.
 
 ## 6. Raise coverage by improving tests
 
@@ -113,6 +125,7 @@ For NestJS:
 - Add branch tests for success, failure, and edge paths.
 - Cover guards, pipes, interceptors, and service error handling.
 - In e2e suites, always close the app in `afterAll`.
+- Prefer deterministic mocks/spies and avoid flaky time/network coupling.
 
 Do not make coverage pass by excluding maintained source files.
 
@@ -128,11 +141,11 @@ Avoid excluding controllers, services, handlers, domain logic, and shared librar
 
 ## 8. Validate completion
 
-- [ ] `npm run test:cov` passes
-- [ ] Coverage directory exists and includes expected reporters
+- [ ] Coverage command passes locally with enforced thresholds
+- [ ] Coverage directory includes expected reporters (`text`, `html`, `lcov`)
 - [ ] Provider package matches config (`v8` or `istanbul`)
-- [ ] Thresholds are enforced in config
-- [ ] Coverage gains came from tests, not broad source exclusions
+- [ ] CI coverage command is aligned with local script behavior
+- [ ] Coverage gains came from test additions or fixes, not broad source exclusions
 
 ## Additional resources
 

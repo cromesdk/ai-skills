@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added new project-level skill `spec-kit-setup` for deterministic `github/spec-kit` install, safe reconcile updates, and workflow readiness validation:
+  - `skills/project/spec-kit-setup/SKILL.md`
+  - `skills/project/spec-kit-setup/agents/openai.yaml`
+  - `skills/project/spec-kit-setup/tests/scenarios.md`
+
 ### Changed
 
 - Strengthened `git-review-orchestrator` to enforce explicit preflight checks before Gate A, including git availability, git-repo validation, and scope evidence collection.

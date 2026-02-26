@@ -27,7 +27,7 @@ Domain-first layout under `skills/`:
 | `nestjs` | 7 | `skills/nestjs` | NestJS backend setup and tooling workflows |
 | `typescript` | 2 | `skills/typescript` | TypeScript tooling workflows |
 | `codex` | 1 | `skills/codex` | Assistant behavior hardening workflows |
-| `project` | 5 | `skills/project` | Repository/project process workflows |
+| `project` | 6 | `skills/project` | Repository/project process workflows |
 | `python` | 0 | `skills/python` | Domain folder present; no `SKILL.md` currently |
 
 Companion-file integrity status: all discovered skills currently include both `agents/openai.yaml` and `tests/scenarios.md`.

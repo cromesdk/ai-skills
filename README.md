@@ -26,7 +26,7 @@ Domain-first layout under `skills/`:
 | `codex` | 1 | `skills/codex` | Assistant behavior hardening workflows |
 | `figma` | 6 | `skills/figma` | Figma-to-code and design workflows |
 | `nestjs` | 14 | `skills/nestjs` | NestJS backend setup, maintenance, and tooling workflows |
-| `project` | 7 | `skills/project` | Repository/process and documentation workflows |
+| `project` | 5 | `skills/project` | Repository/process and documentation workflows |
 | `python` | 0 | `skills/python` | Domain folder present; no `SKILL.md` currently |
 | `typescript` | 8 | `skills/typescript` | TypeScript tooling workflows |
 

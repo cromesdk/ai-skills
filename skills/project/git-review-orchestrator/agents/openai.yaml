@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: "Git Review Orchestrator"
+  short_description: "Plan-mode gated review and quality orchestration"
+  default_prompt: "Run a Plan-Mode-only gated git review on the current diff using all relevant skills, then conditionally run tests, formatter/linter, changelog/readme update planning, and semantic version bump decisions (feature=minor+1, bugfix=patch+1) without any automatic git commit."

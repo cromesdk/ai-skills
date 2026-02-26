@@ -1,13 +1,19 @@
 ---
 name: prisma-rbac
-description: Implements RBAC (User, Group, Role, Permission) in NestJS when Prisma is installed. Uses JWT access tokens, refresh-token session rotation, permission guards, and CRUD plus assignment APIs. Use when adding RBAC, role-based access control, refresh-token auth, or auth/permissions with Prisma.
+description: Add, repair, and verify Prisma-backed RBAC (User, Group, Role, Permission) in existing NestJS backends with JWT access tokens, refresh-token session rotation, permission guards, and CRUD/assignment APIs. Use when users ask to implement or fix role-based access control, auth session rotation, permission-protected endpoints, or Prisma auth/authorization wiring.
 ---
 
 # RBAC with Prisma
 
-When Prisma is installed in a NestJS backend, this skill guides implementing Role-Based Access Control (User -> Group -> Role -> Permission) with JWT auth, refresh-token sessions, and a permission guard. Use the reference project at `c:\Users\Jsiem\Downloads\nestjs-backend-main\nestjs-backend-main` for concrete file structure and patterns.
+Use this skill to implement or remediate Role-Based Access Control in a NestJS backend that already uses Prisma. The target model is:
 
-## Preconditions
+`User -> UserGroup -> Group -> GroupRole -> Role -> RolePermission -> Permission`
+
+This skill assumes a synchronous API workflow and session-backed refresh token rotation.
+
+## Workflow
+
+### Step 1: Preflight checks (required)
 
 - Prisma and PrismaService/PrismaModule are present.
 - ConfigModule is available (for `JWT_SECRET`).
@@ -15,7 +21,9 @@ When Prisma is installed in a NestJS backend, this skill guides implementing Rol
 
 If any optional dependency is missing, add it or adapt (for example, use Nest `LoggerService` instead of a custom logger).
 
-## Prisma schema
+Stop and request the correct backend path if this is not an existing NestJS + Prisma project.
+
+### Step 2: Enforce Prisma schema baseline (required)
 
 Add RBAC models to `prisma/schema.prisma`. Full schema block is in [reference.md](reference.md).
 
@@ -38,7 +46,7 @@ Do not store raw refresh tokens in Prisma; store only a one-way hash.
 
 After schema changes, run `npx prisma migrate dev` and `npx prisma generate`.
 
-## Token model and session refresh standard
+### Step 3: Enforce token/session model (required)
 
 Use a two-token model:
 
@@ -63,7 +71,7 @@ Transport standard:
 - Accept header/body refresh token only for non-browser clients; do not log tokens.
 - Keep access token in `Authorization: Bearer <token>`.
 
-## Module layout
+### Step 4: Wire module boundaries and DI (required)
 
 Single **RbacModule** (for example, `src/libs/rbac/rbac.module.ts`):
 
@@ -75,7 +83,7 @@ Single **RbacModule** (for example, `src/libs/rbac/rbac.module.ts`):
 
 Register RbacModule in `AppModule` imports.
 
-## AuthGuard
+### Step 5: Implement guard behavior (required)
 
 File: `src/libs/rbac/guards/auth.guard.ts`.
 
@@ -93,7 +101,7 @@ File: `src/libs/rbac/guards/auth.guard.ts`.
 
 Inject: AuthService, SessionService (or TokenService), Reflector, JwtService, PrismaService. Use Nest LoggerService or project logger for warnings.
 
-## AuthService
+### Step 6: Implement auth/session services (required)
 
 - **login(username, password):** Validate with UserService (for example, `userService.isValidUser`), fetch user, generate short-lived access JWT (payload: `{ sub: user.id, username, sid }`), generate refresh token, hash refresh token, persist session, return `{ accessToken, refreshToken }`. Throw Unauthorized on invalid credentials.
 - **refresh(refreshToken):** Hash and lookup session; verify not revoked and not expired; rotate session and refresh token; return new token pair.
@@ -115,17 +123,17 @@ Prefer Prisma-backed session store over in-memory for production.
 
 If using Redis instead of Prisma, keep the same service contract and rotation semantics.
 
-## Auth context and session interface
+### Step 7: Add auth context helpers and interfaces (required)
 
 - **AuthContextUtils** (for example, `src/libs/rbac/utils/auth-context.utils.ts`): Parse `Authorization` header; static `getTokenFromHeader(request)` returns token when scheme is `Bearer`, else undefined.
 - **SessionInterface** (for example, `src/libs/rbac/interfaces/session.interface.ts`): include `id`, `userId`, `refreshTokenHash`, `expiresAt`, `revokedAt?`, `replacedById?`.
 
-## Decorators and route protection
+### Step 8: Protect routes with permissions metadata (required)
 
 - **Guard + permissions:** `@UseGuards(AuthGuard)` and `@SetMetadata('permissions', ['resource.action'])` (for example, `['users.read']`, `['users.create']`). Guard requires user to have **all** listed permissions.
 - **Composite (optional):** When Swagger is used, define `Authentication()` = `applyDecorators(UseGuards(AuthGuard), ApiBearerAuth('JWT-auth'), HttpCode(HttpStatus.OK))` and use `@Authentication()` on protected routes.
 
-## DTOs and controllers
+### Step 9: Align DTOs and controllers (required)
 
 **DTOs:** Create/patch/get/delete per entity. Examples:
 
@@ -144,7 +152,7 @@ Use class-validator where applicable (`IsString`, `IsOptional`, `MinLength`, etc
 
 Use a consistent permission naming convention (for example, `users.read`, `users.create`, `users.update`, `users.delete`, `groups.assign`).
 
-## Password hashing
+### Step 10: Enforce hashing and secret-safe logging (required)
 
 Do not store plain passwords. Use bcrypt/bcryptjs (for example, per setup-bcryptjs-nestjs skill) or the project's existing hashing. UserService (or a dedicated service) should hash on create/patch and verify on login.
 
@@ -154,6 +162,15 @@ Do not store plain passwords. Use bcrypt/bcryptjs (for example, per setup-bcrypt
 - **Swagger:** If present, add `@ApiBearerAuth('JWT-auth')`, `@ApiOperation`, `@ApiResponse` on auth and protected endpoints; optional `Responses(kind)` decorator for common status codes. Document refresh cookie/header contract explicitly. If Swagger is not used, omit these.
 - **Encryption package:** If the reference uses a specific encryption package, prefer bcrypt/bcryptjs for new backends unless the project already has a standard.
 - **Refresh token hashing:** Prefer SHA-256/SHA-512 with per-token random value, or HMAC keyed by server secret; never store plaintext refresh tokens.
+
+### Step 11: Verification gates (required)
+
+- Build/test passes for the backend after RBAC changes.
+- Prisma migration and client generation succeed.
+- Login returns access+refresh token pair.
+- Refresh rotates sessions and invalidates/revokes replaced refresh sessions.
+- Protected routes enforce required permissions and deny insufficient scopes.
+- No plaintext passwords or refresh tokens are persisted or logged.
 
 ## Checklist
 
@@ -169,5 +186,13 @@ Do not store plain passwords. Use bcrypt/bcryptjs (for example, per setup-bcrypt
 - [ ] Passwords hashed; no plain-text storage.
 - [ ] Refresh tokens are hashed, never logged, and delivered via secure transport.
 
-For full schema and inspiration file paths, see [reference.md](reference.md).
+For full schema details, see [reference.md](reference.md).
+
+## Official References
+
+1. NestJS Authentication: https://docs.nestjs.com/security/authentication
+2. NestJS Authorization: https://docs.nestjs.com/security/authorization
+3. NestJS Guards: https://docs.nestjs.com/guards
+4. Prisma Data Model: https://www.prisma.io/docs/orm/prisma-schema/data-model/models
+5. Prisma Migrate: https://www.prisma.io/docs/orm/prisma-migrate
 

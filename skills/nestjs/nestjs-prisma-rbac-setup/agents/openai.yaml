@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prisma RBAC Setup"
+  short_description: "Add, repair, and verify Prisma-backed RBAC with JWT auth and refresh-session rotation in NestJS"
+  default_prompt: "Apply the prisma-rbac skill to an existing NestJS + Prisma backend: maintain User/Group/Role/Permission relations, implement permission-guarded endpoints, enforce hashed password and refresh-token storage, wire JWT_SECRET-based auth, support refresh-token rotation/revocation, and verify migrations plus protected-route behavior."

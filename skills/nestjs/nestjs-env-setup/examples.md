@@ -2,7 +2,7 @@
 
 ## .env template
 
-Use this template when creating or documenting .env. It matches common Nest backends (logger, Swagger, port).
+Use this template when creating or documenting `.env`. It matches common Nest backends (logger, Swagger, port).
 
 ```env
 PORT=3000
@@ -25,17 +25,19 @@ SWAGGER_PATH=api/docs
 
 ## Example output of env-sync (manual)
 
-When the AI performs the env-sync command and finds keys in code that are missing from .env, it can report something like:
+When an assistant performs env-sync and finds keys in code that are missing from `.env`, it can report:
 
 ```
-Env sync: found 9 keys in source (PORT, NODE_ENV, LOGGER_LEVEL, LOGGER_SERVICE_NAME, LOGGER_PATH, SWAGGER_TITLE, SWAGGER_DESCRIPTION, SWAGGER_VERSION, SWAGGER_PATH, JWT_SECRET).
-Updated .env: added LOGGER_PATH=, JWT_SECRET=.
+Env sync: found 10 keys in source (PORT, NODE_ENV, LOGGER_LEVEL, LOGGER_SERVICE_NAME, LOGGER_PATH, SWAGGER_TITLE, SWAGGER_DESCRIPTION, SWAGGER_VERSION, SWAGGER_PATH, JWT_SECRET).
+Updated .env: appended LOGGER_PATH=, JWT_SECRET=.
+No existing values were modified.
 ```
 
-Or simpler:
+Or shorter:
 
 ```
 Env sync complete. .env updated with missing keys from src/.
+Existing keys and values were preserved.
 ```
 
-The sync should not overwrite existing values; it only appends new keys with an empty value so the user can fill them in.
+The sync must never overwrite existing values. It appends only missing keys with empty values so the user can fill them in.

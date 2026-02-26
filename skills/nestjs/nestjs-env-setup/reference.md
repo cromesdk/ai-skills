@@ -20,7 +20,7 @@ export class EnvironmentModule {}
 
 ## EnvironmentService
 
-Thin wrapper around ConfigService with typed getters. Add more getters to mirror keys used in the app (e.g. LOGGER_PATH, SWAGGER_TITLE).
+Thin wrapper around ConfigService with typed getters. Add more getters to mirror keys used in the app (for example `LOGGER_PATH`, `SWAGGER_TITLE`).
 
 **src/libs/environment/environment.service.ts**
 
@@ -44,7 +44,7 @@ export class EnvironmentService {
 
 ## Env utilities
 
-Uses Node `path` and `fs`: `path.resolve(process.cwd(), ...)` for .env path, `fs.mkdirSync(dir, { recursive: true })` before write when .env is under a subdir, `fs.existsSync` for existence check.
+Uses Node `path` and `fs`: `path.resolve(process.cwd(), ...)` for `.env` path, `fs.mkdirSync(dir, { recursive: true })` before writes when `.env` is under a subdir, `fs.existsSync` for existence checks.
 
 **src/libs/environment/environment.utils.ts**
 
@@ -79,12 +79,14 @@ export function environmentFileExists(): boolean {
 
 ## Env-sync (manual): regex and merge algorithm
 
+This algorithm is assistant-agnostic. If teams use command files (for example `.cursor/commands/env-sync.md`), they should encode the same rules below.
+
 ### Regex patterns
 
 - **ConfigService.get key** (single or double quotes, optional type param):
   - `configService\.get\s*<[^>]*>\s*\(\s*['"]([^'"]+)['"]`
   - Or without type: `\.get\s*\(\s*['"]([^'"]+)['"]`
-  - Capture group 1 = variable name (e.g. `PORT`, `LOGGER_LEVEL`).
+  - Capture group 1 = variable name (for example `PORT`, `LOGGER_LEVEL`).
 
 - **process.env key**:
   - `process\.env\.([A-Za-z_][A-Za-z0-9_]*)`
@@ -95,15 +97,16 @@ Scan all `.ts` files under `src` (and optionally `test`) with these regexes and 
 ### Parse existing .env
 
 - Read `.env` with `fs.readFileSync('.env', 'utf8')` if it exists.
-- Line-by-line:
+- Line by line:
   - If line is empty or trimmed starts with `#`: treat as comment and keep as-is in output.
-  - If line matches `KEY=value` (key: `[A-Za-z_][A-Za-z0-9_]*`, value: rest after first `=`): keep line as-is; add KEY to a set of "existing keys".
+  - If line matches `KEY=value` (key: `[A-Za-z_][A-Za-z0-9_]*`, value: rest after first `=`): keep line as-is and add `KEY` to the existing key set.
 
 ### Merge
 
-- Output in order: all comment and blank lines, then all existing `KEY=value` lines.
-- For each discovered key from the code scan that is not in "existing keys", append a new line `KEY=` (or `KEY=placeholder` if you prefer).
-- Write the result to `.env` with `fs.writeFileSync('.env', output)`.
+- Preserve existing line order exactly.
+- For each discovered key from code scan that is not in existing keys, append `KEY=`.
+- Never overwrite existing key values.
+- Write with `fs.writeFileSync('.env', output)`.
 
 ### Pseudocode
 
@@ -129,5 +132,3 @@ for each key in sorted(discoveredKeys):
   if key not in existingKeys: out.push(key + '=')
 writeFileSync('.env', out.join('\n'))
 ```
-
-The env-sync Cursor command instructs the AI to perform these steps manually; no script is required.

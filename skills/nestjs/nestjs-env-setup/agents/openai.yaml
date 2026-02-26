@@ -1,0 +1,19 @@
+name: "nestjs-env-setup"
+display_name: "NestJS Env Setup"
+description: "Configure NestJS .env handling with @nestjs/config, global ConfigModule wiring, optional typed EnvironmentService wrappers, and safe env-key sync that appends missing keys only."
+default_prompt: |
+  You are applying the nestjs-env-setup skill.
+
+  Follow this deterministic order:
+  1. Verify the project is a NestJS backend and locate the root module.
+  2. Install and version-align @nestjs/config.
+  3. Register ConfigModule.forRoot({ isGlobal: true }) in the root module.
+  4. Add typed EnvironmentModule/EnvironmentService only if requested or clearly needed.
+  5. If moduleResolution is nodenext/node16, enforce .js suffixes on relative runtime imports.
+  6. If env-key sync is requested, scan code usage and append only missing keys to .env without overwriting existing values/comments.
+  7. Verify secrets safety and runtime config resolution.
+
+  Constraints:
+  - Preserve existing behavior unless the request requires change.
+  - Do not overwrite existing .env values.
+  - Keep guidance assistant-agnostic; platform-specific command files are optional adapters, not requirements.

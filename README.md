@@ -4,107 +4,109 @@
   <img src="assets/logo.svg" alt="Project logo" />
 </p>
 
-
-Curated, reusable agent skills for Angular- and Figma-centric engineering workflows, organized for deterministic execution and repeatable quality checks.
+Curated, reusable agent skills for deterministic engineering workflows across Angular, Figma, NestJS, TypeScript, Codex, and project documentation operations.
 
 ## Overview and Scope
 
-This repository stores skill packages used by coding assistants.  
-Each skill package is self-contained and follows a common contract:
+This repository is a skill catalog for coding assistants. Each skill package is organized under `skills/<domain>/<skill-name>/` and is expected to include:
 
 - `SKILL.md` (workflow and rules)
 - `agents/openai.yaml` (interface metadata)
 - `tests/scenarios.md` (evaluation scenarios)
 
-Scope includes skill authoring, skill maintenance, and scenario coverage across Angular, Figma, NestJS, TypeScript, Python, Codex, and project-level documentation workflows.
+Repository scope includes skill authoring, maintenance, and scenario coverage for assistant behavior and delivery workflows.
 
 ## Architecture at a Glance
 
-The repository uses a domain-first folder model under `skills`.
+Domain-first layout under `skills/`:
 
-| Domain | Purpose | Path |
-|---|---|---|
-| `angular` | Angular app/tooling workflows | `skills/angular` |
-| `figma` | Figma-to-code workflows | `skills/figma` |
-| `nestjs` | NestJS backend/workflow setup patterns | `skills/nestjs` |
-| `typescript` | TypeScript tooling/setup workflows | `skills/typescript` |
-| `python` | Python-focused workflows and utilities | `skills/python` |
-| `codex` | Assistant behavior hardening workflows | `skills/codex` |
-| `project` | Project documentation maintenance workflows | `skills/project` |
+| Domain | Skill Count (`SKILL.md`) | Path | Notes |
+|---|---:|---|---|
+| `angular` | 15 | `skills/angular` | Angular application/tooling workflows |
+| `figma` | 6 | `skills/figma` | Figma-to-code and design workflows |
+| `nestjs` | 7 | `skills/nestjs` | NestJS backend setup and tooling workflows |
+| `typescript` | 2 | `skills/typescript` | TypeScript tooling workflows |
+| `codex` | 1 | `skills/codex` | Assistant behavior hardening workflows |
+| `project` | 5 | `skills/project` | Repository/project process workflows |
+| `python` | 0 | `skills/python` | Domain folder present; no `SKILL.md` currently |
+
+Companion-file integrity status: all discovered skills currently include both `agents/openai.yaml` and `tests/scenarios.md`.
 
 ## Prerequisites
 
-- Git (to inspect and update repository changes).
-- A coding-assistant runtime that can execute skill instructions from `SKILL.md`.
-- Node.js/npm only when a specific skill requires Angular CLI/package commands.
+- Git
+- A coding-assistant runtime capable of executing skill instructions from `SKILL.md`
+- Node.js/npm only when an individual skill requires Node-based tooling
 
 ## Quick Start
 
-1. Open this repository as the active workspace.
-2. Select a skill and invoke it by name in your prompt.
-3. Review generated/updated files and scenario coverage.
+1. Open this repository as your active workspace.
+2. Invoke a skill by name in your prompt.
+3. Review changed files and scenario coverage for the touched skill.
 
 Example invocations:
 
 ```text
-$readme-updater Update the root README to enterprise quality.
-$changelog-keepachangelog-update Update CHANGELOG.md from current git changes.
+$readme-updater recreate readme
+$changelog-keepachangelog-update update changelog from current repository changes
 ```
 
 ## Configuration and Environment Variables
 
-Not applicable: no repository-level `.env` or `.env.example` files are present at this time.
+Not applicable at repository root: no root `.env`/`.env.example` contract is defined.
 
 ## Development Workflow (Test/Lint/Build)
 
-Not applicable at repository root: no root `package.json` is present, so no root build/lint/test command catalog exists.
+Not applicable at repository root: no root `package.json` command catalog is present.
 
-Validation workflow used for skills:
+Skill-level quality workflow:
 
-- Keep each skill limited to one responsibility.
-- Keep `agents/openai.yaml` aligned with `SKILL.md`.
-- Keep `tests/scenarios.md` updated for easy/hard/edge cases.
+1. Keep each skill scoped to one primary responsibility.
+2. Keep `agents/openai.yaml` aligned with `SKILL.md` behavior.
+3. Keep `tests/scenarios.md` updated when workflow behavior changes.
 
 ## Operations and Troubleshooting
 
-Operational checks:
+Basic runbook checks:
 
-- Confirm skill path exists before invocation.
-- Confirm companion files exist:
-  - `SKILL.md`
-  - `agents/openai.yaml`
-  - `tests/scenarios.md`
-- If a target file is missing for an update request, ask one precise clarification question before creating new files.
+1. Confirm target skill path exists under `skills/<domain>/<skill-name>/`.
+2. Confirm required companion files exist:
+   - `SKILL.md`
+   - `agents/openai.yaml`
+   - `tests/scenarios.md`
+3. If an update target file is missing, clarify creation intent before writing.
 
-Common issue:
+Common failure mode:
 
-- Skill not discoverable
-  - Verify frontmatter `name` and `description` in `SKILL.md` are accurate and trigger-friendly.
+- Skill discovery mismatch
+  - Verify `name` and `description` frontmatter in `SKILL.md` are accurate and trigger-friendly.
 
 ## Deployment and Release
 
-Not applicable: no deployment manifests, packaging pipeline, or release automation are defined in this repository.
+Release documentation is maintained in [CHANGELOG.md](./CHANGELOG.md) (Keep a Changelog format).
+
+Deployment automation/pipeline guidance at repository root: `TBD (owner needed)`.
 
 ## Security and Compliance
 
-- Do not add unverifiable security/compliance claims to docs.
-- Keep license metadata explicit (`LICENSE` is present; MIT).
-- Do not commit secrets; no secrets-management workflow is defined in this repo.
-- Compliance posture details are `TBD (owner needed)`.
+- License file is present and project is MIT-licensed ([LICENSE](./LICENSE)).
+- No repository-level secrets-management workflow is documented.
+- Do not introduce unverifiable compliance claims in skill docs.
+- Security/compliance ownership model: `TBD (owner needed)`.
 
 ## Contributing and Code Standards
 
 1. Add or update a skill under `skills/<domain>/<skill-name>/`.
 2. Keep instructions deterministic and non-destructive by default.
 3. Update `tests/scenarios.md` when behavior changes.
-4. Keep `agents/openai.yaml` metadata aligned with skill behavior.
-5. Validate structural integrity before merge.
+4. Keep `agents/openai.yaml` synchronized with skill workflow changes.
+5. Validate companion-file completeness before merge.
 
 ## Ownership, Support, and Escalation
 
-- Primary owner: `TBD (owner needed)`.
-- Support channel: `TBD (owner needed)`.
-- Escalation path: `TBD (owner needed)`.
+- Repository owner: `TBD (owner needed)`
+- Support channel: `TBD (owner needed)`
+- Escalation path: `TBD (owner needed)`
 
 ## License and Legal Notices
 

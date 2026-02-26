@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Strengthened `git-review-orchestrator` to enforce explicit preflight checks before Gate A, including git availability, git-repo validation, and scope evidence collection.
+- Clarified fail-fast gate sequencing and output contract requirements, including mandatory `Preflight` row ordering in the gate matrix and explicit `no_changes` handling.
+- Updated `git-review-orchestrator` agent interface metadata to align prompt/description wording with fail-fast preflight-first behavior.
+- Expanded orchestrator scenario coverage with edge cases for preflight failure modes, `no_changes` scope behavior, and ambiguous release classification handling.
+
 ## [1.0.2] - 2026-02-24
 
 ### Added
